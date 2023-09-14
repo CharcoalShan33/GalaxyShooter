@@ -15,28 +15,10 @@ public class PowerUp : MonoBehaviour
 
     private Rigidbody2D rig;
 
-    //Player player;
-
-   
-    
-    GameObject target;
-
-  public static bool seenTarget;
-
-
-    Vector3 direction;
-
-   // [SerializeField]
-    //private GameObject _audio;
-
-    //private AudioManager aManager;
     
     void Start()
     {
-        //direction = GameObject.FindGameObjectWithTag("Player").transform.position;
-        //aManager = GameObject.Find("Audio_Manager").GetComponent<AudioManager>();
-
-        target = GameObject.FindGameObjectWithTag("Player");
+        
         rig = GetComponent<Rigidbody2D>();
 
         if(rig == null)
@@ -44,13 +26,9 @@ public class PowerUp : MonoBehaviour
             Debug.LogError("This Component is NULL.");
         }
     }
-
-    // Update is called once per frame
-
-
     private void Update()
     {
-    
+
 
         transform.Translate(Vector2.down * _speed * Time.deltaTime);
         if (transform.position.y < -8f)
@@ -59,30 +37,11 @@ public class PowerUp : MonoBehaviour
         }
 
 
-       if(seenTarget)
-        {
-            MoveToPlayer();
-        }
-
     }
-
   
-    void MoveToPlayer()
-    {
-      
-       transform.position = Vector3.Lerp(transform.position, target.transform.position, _speed * Time.deltaTime); 
-    }
-
-   
-    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //aManager.PlayClip(_pClip);
-
         AudioSource.PlayClipAtPoint(_pClip, transform.position);
-
-        //Instantiate(_audio, transform.position, Quaternion.identity);
-
 
         if (other.tag == "Player")
         {
