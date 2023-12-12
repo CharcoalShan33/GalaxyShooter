@@ -15,7 +15,6 @@ public class PowerUp : MonoBehaviour
 
     private Rigidbody2D rig;
 
-    
     void Start()
     {
         
@@ -28,15 +27,11 @@ public class PowerUp : MonoBehaviour
     }
     private void Update()
     {
-
-
         transform.Translate(Vector2.down * _speed * Time.deltaTime);
         if (transform.position.y < -8f)
         {
             Destroy(this.gameObject);
         }
-
-
     }
   
     private void OnTriggerEnter2D(Collider2D other)

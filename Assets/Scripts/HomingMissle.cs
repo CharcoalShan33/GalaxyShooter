@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HomingMissle : MonoBehaviour
 {
-    [SerializeField]
+    
     GameObject target; // who the missle is aming towards;
 
     [SerializeField]
@@ -15,17 +15,18 @@ public class HomingMissle : MonoBehaviour
     [SerializeField]
     float _rotateSpeed;
 
-    Vector2 direction;
+    Vector3 direction;
 
-   
+
+  
 
     // Start is called before the first frame update
     void Start()
     {
+
         rig = GetComponent<Rigidbody2D>();
 
-        target = GameObject.FindWithTag("Enemy");
-
+        target = GameObject.FindGameObjectWithTag("Enemy");
         if (rig == null)
         {
             Debug.LogError("This component is null.");
@@ -36,15 +37,15 @@ public class HomingMissle : MonoBehaviour
     void Update()
 
     {
-         
-      
 
-        
+
+
+
     }
 
     private void FixedUpdate()
     {
-        FollowEnemy2();
+        FollowEnemy();
     }
 
     void FollowEnemy1()
@@ -52,24 +53,25 @@ public class HomingMissle : MonoBehaviour
         //transform.Translate(Vector3.up * _fireSpeed * Time.deltaTime);
         //transform.position = Vector2.MoveTowards(transform.position, target.transform.position, _fireSpeed * Time.deltaTime);
     }
-    void FollowEnemy2()
+    void FollowEnemy()
     {
-        direction = target.transform.position - transform.position;
+        Vector3 misslePos = rig.position;
 
-        direction.Normalize();
+        direction = target.transform.position - misslePos;
+
+       
 
         float rotate = Vector3.Cross(direction, transform.up).z;
+        
 
-        rig.angularVelocity = -rotate * _rotateSpeed;
+        rig.angularVelocity = -_rotateSpeed * rotate;
 
         rig.velocity = transform.up * _fireSpeed;
         // this will move, so 
 
+        
 
-        Destroy(this.gameObject, 5f);
     }
-
    
-    
 
 }

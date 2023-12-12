@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class WaveSystem : MonoBehaviour
 {
+   // int totalEnemies;
+
+//    private bool _isPlayerDead = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +20,14 @@ public class WaveSystem : MonoBehaviour
     {
         
     }
+
+
+
+
+
+
+
+
 }
+
+

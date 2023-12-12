@@ -25,10 +25,10 @@ public class BigCannon : MonoBehaviour
             if (transform.parent == null)
             {
 
-                Destroy(transform.parent.gameObject);
+                transform.parent.gameObject.SetActive(false);
             }
 
-            Destroy(gameObject);
+           gameObject.SetActive(false);
 
         }
     }
@@ -42,7 +42,7 @@ public class BigCannon : MonoBehaviour
             camShaker.Tremor(.65f, 30f, .35f, 1);
         }
 
-        Destroy(this.gameObject);
+        gameObject.SetActive(false);
 
     }
 

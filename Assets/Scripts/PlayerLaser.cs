@@ -20,6 +20,8 @@ public class PlayerLaser : MonoBehaviour
         {
             Debug.LogError("THIS COMPONENT IS NULL! FIND THE COMPONENT");
         }
+
+      
     }
 
     // Update is called once per frame
@@ -29,13 +31,13 @@ public class PlayerLaser : MonoBehaviour
 
         if (transform.position.y > 8f)
         {
-           // if (transform.parent == null)
-            //{
-            //    Destroy(transform.parent.gameObject);
-           // }
+             if (transform.parent == null)
+            {
+               transform.parent.gameObject.SetActive(false);
+             }
 
-            Destroy(gameObject);
-
+            
+            gameObject.SetActive(false);
 
 
         }

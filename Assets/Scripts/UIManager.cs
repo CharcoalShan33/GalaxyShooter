@@ -41,9 +41,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Thruster")]
 
-  
     float _charge;
-   
 
     [SerializeField]
     Slider _chargeBar;
@@ -53,11 +51,15 @@ public class UIManager : MonoBehaviour
 
     [Header("Reload")]
 
+    // current ammo text
     [SerializeField]
     TMP_Text _ammoText;
 
-    //[SerializeField]
-    //TMP_Text _maxAmmoText;
+
+    [SerializeField]
+    int _maxValue = 50;
+    [SerializeField]
+    int _currentValue = 15;
 
 
 
@@ -82,9 +84,7 @@ public class UIManager : MonoBehaviour
 
         shieldText.text = 0.ToString();
 
-        _ammoText.text = 15.ToString();
-
-        //_maxAmmoText.text = 100.ToString();
+        
 
         _gameOverText.gameObject.SetActive(false);
 
@@ -93,14 +93,12 @@ public class UIManager : MonoBehaviour
         gameManager = GameObject.Find("game_manager").GetComponent<GameManager>();
 
         shieldSlider.gameObject.SetActive(false);
-
-       
-       
-
         _cFiller.gameObject.SetActive(false);
         maxCoolDown = _cFiller.maxValue;
         _cFiller.value = maxCoolDown;
-        //rig = _chargeBar.gameObject.GetComponent<Rigidbody2D>();
+
+
+        
     }
 
     // Update is called once per frame
@@ -147,7 +145,7 @@ public class UIManager : MonoBehaviour
         {
             _charge = _chargeBar.value;
             isCharging = false;
-        } 
+        }
     }
 
     // makes the charge value go up or down.
@@ -165,13 +163,13 @@ public class UIManager : MonoBehaviour
             _chargeBar.value -= Time.deltaTime * _charge;
 
             yield return null;
-            
+
         }
     }
 
     public void UpdateShields(int currentShield)
     {
-        
+
         shieldText.text = currentShield.ToString();
     }
 
@@ -194,15 +192,58 @@ public class UIManager : MonoBehaviour
 
     }
 
-
-
-
     public void UpdateAmmo(int reload)
     {
 
-        _ammoText.text = reload.ToString();
+        //_ammoText.text = reload.ToString();
+        _currentValue = reload;
+        _ammoText.text = "Ammo: " + _currentValue + "/" + _maxValue;
+
+
+        if (_currentValue <= 5 && _currentValue > 0 )
+        {
+            StartCoroutine(Blink());
+        }
+       
+        else if(_currentValue > 5)
+        {
+            _ammoText.color = Color.white;
+
+        }
+
+
 
     }
+
+    IEnumerator Blink()
+    {
+       
+        while (true)
+        {
+          
+            _ammoText.color = Color.yellow;
+            yield return new WaitForSeconds(.1f);
+            _ammoText.color = Color.white;
+            yield return new WaitForSeconds(.1f);
+
+           if(_currentValue <= 0)
+           {
+                yield return StartCoroutine(StopBlink());
+               yield break;
+            }
+        }
+        
+        
+    }
+    IEnumerator StopBlink()
+    {
+        yield return new WaitForSeconds(.5f);
+         
+        _ammoText.color = Color.red;
+
+    }
+
+
 
     void GameOverSequence()
     {
@@ -245,7 +286,6 @@ public class UIManager : MonoBehaviour
 
     public void StartCountTimer(float count)
     {
-
         coolDownSeconds = count;
         _cFiller.gameObject.SetActive(true);
         _chargeBar.gameObject.SetActive(false);
@@ -253,7 +293,6 @@ public class UIManager : MonoBehaviour
         {
             StopCountDown();
         }
-
     }
     public void StopCountDown()
     {
@@ -269,6 +308,6 @@ public class UIManager : MonoBehaviour
 
         _chargeBar.value = speed;
     }
-    
+
 
 }

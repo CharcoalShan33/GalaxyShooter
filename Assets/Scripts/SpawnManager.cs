@@ -18,35 +18,36 @@ public class SpawnManager : MonoBehaviour
 
     private bool _isPlayerDead = false;
 
+ 
     float startTimeValue = 3.0f;
 
-    [SerializeField]
-    float spawnTime = 2.0f;
+    //[SerializeField]
+    // float spawnTime = 2.0f;
+
+    //[SerializeField]
+    //float timer = 0.0f;
 
     [SerializeField]
-    float timer = 0.0f;
-
-
-    
+    bool isHorizontal;
    
     // Start is called before the first frame update
     void Start()
     {
         //chanceDrop = Random.Range(0, 100);
-        enabled = false;
+        //enabled = false;
     }
 
     // Update is called once per frame
     public void Update()
     {
-        
+        /*
         timer += Time.deltaTime;
         if (timer >= spawnTime)
         {
             RareSpawn();
             timer -= spawnTime;
         }
-
+        */
       
 
     }
@@ -54,11 +55,18 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(startTimeValue);
 
+       
         while (_isPlayerDead == false)
         {
-            Vector2 enemyPosition = new Vector2(Random.Range(-8f, 8f), 7);
-            GameObject NewEnemy = Instantiate(_enemyObject, enemyPosition, Quaternion.identity);
-            NewEnemy.transform.parent = _enemyContainer.transform;
+           
+            
+                //Vector2 randomEnemyPosition = new Vector2(Random.Range(-14f, 14f), Random.Range(-7f,7f));
+
+                Quaternion rotateNew = Quaternion.Euler(0f, 0f, Random.Range(-20f, 20f));
+                Vector2 enemyPosition = new Vector2(Random.Range(-8f, 8f), 7);
+                GameObject NewEnemy = Instantiate(_enemyObject, enemyPosition, rotateNew);
+                NewEnemy.transform.parent = _enemyContainer.transform;
+           
             yield return new WaitForSeconds(5.0f);
 
         }
@@ -69,11 +77,12 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnPowerUp()
     {
         yield return new WaitForSeconds(startTimeValue);
+
         while (_isPlayerDead == false)
         {
             Vector2 powerPosition = new Vector2(Random.Range(-8f, 8f), 7);
 
-            int randomValue = Random.Range(0, 2);
+            int randomValue = Random.Range(0, 8);
       
             Instantiate(_powerUp[randomValue], powerPosition, Quaternion.identity);
             
@@ -97,9 +106,10 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
+        enabled = true;
         StartCoroutine(EnemySpawning());
         StartCoroutine(SpawnPowerUp());
-        StartCoroutine(StartUpdate());
+      
 
     }
 
@@ -112,11 +122,7 @@ public class SpawnManager : MonoBehaviour
     }
 
 
-    IEnumerator StartUpdate()
-    {
-        yield return new WaitForSeconds(startTimeValue);
-        enabled = true;
-    }
+  
 
     IEnumerator StopUpdate()
     {

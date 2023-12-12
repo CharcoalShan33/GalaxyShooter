@@ -7,7 +7,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     private float _enSpeed = 5.0f;
 
-    
+    [SerializeField]
+    int moveID;
+
+   
     private Player _player;
 
     private Animator _enemyAnim;
@@ -38,6 +41,13 @@ public class EnemyMovement : MonoBehaviour
     private float _angle;
 
 
+
+    [Header("Shield")]
+
+
+    ControlMovement ctrlMove;
+
+    //this was to prevent an object for colliding twice.
     bool didCollide;
 
     // Start is called before the first frame update
@@ -49,6 +59,7 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
 
+        ctrlMove = GetComponent<ControlMovement>();
         _enemyAnim = GetComponentInChildren<Animator>();
 
         _audioExplode = GetComponent<AudioSource>();
@@ -69,12 +80,20 @@ public class EnemyMovement : MonoBehaviour
             Debug.LogError("Find the Audio Source Component");
         }
 
+        if (ctrlMove == null)
+        {
+            Debug.LogError("Find the Movement Component");
+        }
+
+        ctrlMove.enabled = true;
     }
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        transform.Translate(Vector3.down * _enSpeed * Time.deltaTime);
 
+
+
+        //BasicMovement();
         if (transform.position.y < -7f)
         {
             float randomX = Random.Range(-14f, 14f);
@@ -82,52 +101,98 @@ public class EnemyMovement : MonoBehaviour
 
             transform.position = new Vector2(randomX, 7);
         }
+
+
+       
+        else if (transform.position.x > 14)
+        {
+            transform.position = new Vector2(-14, 0);
+        }
+
+        else if (transform.position.x < -14)
+        {
+            transform.position = new Vector2(14, 0);
+        }
+
+
         //FacePlayer();
         //EnemyFire();
     }
 
+    private void FixedUpdate()
+    {
+        
+        switch (moveID)
+        {
+
+
+            case 1:
+                ctrlMove.UpDown();
+                OtherMovement();
+                break;
+            case 2:
+                ctrlMove.LeftRight();
+                BasicMovement();
+                break;
+
+            case 3:
+                BasicMovement();
+                break;
+
+        }
+
+        
+
+    }
+
+    void BasicMovement()
+    {
+        
+        transform.Translate(Vector3.down * _enSpeed * Time.deltaTime);
+    }
+    void OtherMovement()
+    {
+        transform.Translate(Vector3.right * _enSpeed * Time.deltaTime);
+        
+    }
+
+    public void MoveDirection(int move)
+    {
+        moveID = move;
+    }
+
     void EnemyFire()
     {
-     
+
 
         if (Time.time > _nextFire)
         {
-            
+
             _nextFire = Time.time + _enemyFireRate;
 
-            Shoot();
+            GameObject _eLaser = Instantiate(_enemyBullet, transform.position, Quaternion.identity);
+
         }
     }
-    void Shoot()
-    {
-        
+    
 
-        GameObject _eLaser = Instantiate(_enemyBullet, transform.position, Quaternion.identity);
-
-        Laser _laserMove = _eLaser.GetComponentInChildren<Laser>();
-
-        _laserMove.AssignLaser();
-
-      
-        
-    }
-/*
-    void FacePlayer()
-    {
-        if (_playerTransform != null)
+    /*
+        void FacePlayer()
         {
-            _enemyDirection = _playerTransform.position - transform.position;
-            _angle = Mathf.Atan2(_enemyDirection.y, _enemyDirection.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(_angle + 90f, Vector3.forward);
-        }
-        
-    }
-*/
+            if (_playerTransform != null)
+            {
+                _enemyDirection = _playerTransform.position - transform.position;
+                _angle = Mathf.Atan2(_enemyDirection.y, _enemyDirection.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(_angle + 90f, Vector3.forward);
+            }
 
-    private void OnTriggerEnter2D(Collider2D other)
+        }
+    */
+
+    void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.CompareTag("Player")  && didCollide == false)
+        if (other.CompareTag("Player") && didCollide == false)
         {
 
             Player player = other.transform.GetComponent<Player>();
@@ -139,26 +204,25 @@ public class EnemyMovement : MonoBehaviour
             }
             didCollide = true;
 
+            ctrlMove.enabled = false;
             _enemyAnim.SetTrigger("OnEnemyDeath");
-            
             _enSpeed = 0f;
             _audioExplode.Play();
-            
             Destroy(this.gameObject, 2.4f);
-            
-        }
-   
 
-        else if (other.CompareTag("Laser"))
+        }
+
+        else if (other.CompareTag("Laser") | other.CompareTag("Laser1")  | other.CompareTag("Laser2"))
         {
 
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
+            
 
             if (_player != null)
             {
                 _player.AddScore(10);
             }
-
+            ctrlMove.enabled = false;
             _enemyAnim.SetTrigger("OnEnemyDeath");
             _enSpeed = 0f;
             _audioExplode.Play();
@@ -168,7 +232,8 @@ public class EnemyMovement : MonoBehaviour
         }
 
 
-        
+
     }
+
 
 }

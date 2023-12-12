@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Pool;
-
 public class Player : MonoBehaviour
 {
     [Header("Shooting")]
@@ -20,8 +18,8 @@ public class Player : MonoBehaviour
 
     bool isFiring;
 
-    [SerializeField]
-    int maxAmmoStorage = 50;
+    //[SerializeField]
+    // int maxAmmoStorage = 50;
 
     [Header("Player")]
 
@@ -82,7 +80,6 @@ public class Player : MonoBehaviour
 
     private AudioSource _audioSource;
 
-
     [Header("Shield")]
 
     [SerializeField]
@@ -110,10 +107,13 @@ public class Player : MonoBehaviour
     private float maxSpeed = 10f;
 
     private float speedMulitiplier = 2.5f;
- 
+
     //[serializeField] private GameObject effect;
 
+
+
     // Start is called before the first frame update
+
     void Start()
     {
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -146,10 +146,14 @@ public class Player : MonoBehaviour
         _leftHitShip.SetActive(false);
         _rightHitShip.SetActive(false);
 
-        currentAmmo = maxAmmo;
+        _uiManager.UpdateAmmo(maxAmmo);
+
+
 
         // effect.SetActive(false);
         _pSpeed = 7.0f;
+
+        currentAmmo = maxAmmo;
     }
 
     // Update is called once per frame
@@ -171,6 +175,16 @@ public class Player : MonoBehaviour
         {
             FireMissle();
         }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            AttractMagnet();
+        }
+    }
+
+    void AttractMagnet()
+    {
+        //foreach;
     }
 
     void FireMissle()
@@ -199,17 +213,47 @@ public class Player : MonoBehaviour
         if (currentAmmo > 0)
         {
             PlaySFXClip(_laserShot[0]);
-            Instantiate(_missle, shootPoint.transform.position, Quaternion.identity);
+
+            GameObject bullet1 = PoolManager.Instance.RetrieveObject("Laser");
+            _missle = bullet1;
+            if (bullet1 != null)
+            {
+                bullet1.transform.position = shootPoint.transform.position;
+                bullet1.transform.rotation = shootPoint.transform.rotation;
+                bullet1.SetActive(true);
+            }
+
+
+            //Instantiate(_missle, shootPoint.transform.position, Quaternion.identity);
 
             if (_isTripleShotActive == true)
             {
-
-                Instantiate(tripleShotMissle, shootPoint.transform.position, Quaternion.identity);
+                GameObject bullet2 = PoolManager.Instance.RetrieveObject("Laser1");
+                tripleShotMissle = bullet2;
+                if (bullet2 != null)
+                {
+                    bullet2.transform.position = shootPoint.transform.position;
+                    bullet2.transform.rotation = shootPoint.transform.rotation;
+                    bullet2.SetActive(true);
+                    bullet1.SetActive(false);
+                }
+                //Instantiate(tripleShotMissle, shootPoint.transform.position, Quaternion.identity);
             }
 
             if (isNewFireActive == true)
             {
-                Instantiate(_cannon, shootPoint.transform.position, Quaternion.identity);
+
+                GameObject bullet3 = PoolManager.Instance.RetrieveObject("Laser2");
+                _cannon = bullet3;
+                if (bullet3 != null)
+                {
+                    bullet3.transform.position = shootPoint.transform.position;
+                    bullet3.transform.rotation = shootPoint.transform.rotation;
+                    bullet3.SetActive(true);
+                    bullet1.SetActive(false);
+                }
+
+                //Instantiate(_cannon, shootPoint.transform.position, Quaternion.identity);
             }
 
             _uiManager.UpdateAmmo(currentAmmo);
@@ -251,17 +295,16 @@ public class Player : MonoBehaviour
     {
         while (isShieldBoostActive == true)
         {
-            if (_shieldsAmount > 0)
-            {
-                _shieldsAmount -= 1;
-                shieldColor = _shieldRend.color;
-                shieldColor.a -= .33f;
-                _shieldRend.color = shieldColor;
 
-                _uiManager.UpdateShields(_shieldsAmount);
-                _uiManager.SetShield(_shieldsAmount);
-            }
-            else if (_shieldsAmount <= 0)
+            _shieldsAmount -= 1;
+            shieldColor = _shieldRend.color;
+            shieldColor.a -= .33f;
+            _shieldRend.color = shieldColor;
+
+            _uiManager.UpdateShields(_shieldsAmount);
+            _uiManager.SetShield(_shieldsAmount);
+
+            if (_shieldsAmount <= 0)
             {
                 shieldVisual.SetActive(false);
 
@@ -301,8 +344,8 @@ public class Player : MonoBehaviour
 
     public void NewFireActive()
     {
-        tripleShotMissle.SetActive(false);
-        _missle.SetActive(false);
+        //tripleShotMissle.SetActive(false);
+        //_missle.SetActive(false);
         _cannon.SetActive(true);
         isNewFireActive = true;
         StartCoroutine(NewFire());
@@ -311,8 +354,8 @@ public class Player : MonoBehaviour
     public void TripleShotActive()
     {
         tripleShotMissle.SetActive(true);
-        _cannon.SetActive(false);
-        _missle.SetActive(false);
+        //_cannon.SetActive(false);
+        //_missle.SetActive(false);
         _isTripleShotActive = true;
         StartCoroutine(TripleShotCountDown());
     }
@@ -327,6 +370,7 @@ public class Player : MonoBehaviour
 
     public void ShieldBoostActive()
     {
+
         isShieldBoostActive = true;
         _uiManager.UpdateShields(maxShieldAmount);
         _uiManager.SetMaxShield(maxShieldAmount);
@@ -338,15 +382,15 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _isTripleShotActive = false;
-        _missle.SetActive(true);
         tripleShotMissle.SetActive(false);
+        //_missle.SetActive(true);
     }
     IEnumerator NewFire()
     {
         yield return new WaitForSeconds(5f);
         isNewFireActive = false;
-        _missle.SetActive(true);
         _cannon.SetActive(false);
+        //_missle.SetActive(true);
     }
 
     IEnumerator SpeedCountDown()
@@ -356,7 +400,6 @@ public class Player : MonoBehaviour
         isSpeedBoostActive = false;
         // effect.SetActive(false);
     }
-
 
     public void AddScore(int points)
     {
@@ -381,9 +424,6 @@ public class Player : MonoBehaviour
         _uiManager.UpdateLives(lives);
 
     }
-
-
-
     public void AddShieldStrength(int shields)
     {
         _shieldsAmount = shields;
@@ -395,7 +435,7 @@ public class Player : MonoBehaviour
         currentAmmo = maxAmmo;
         _uiManager.UpdateAmmo(maxAmmo);
         isFiring = true;
-        PlaySFXClip(_laserShot[0]);
+        //PlaySFXClip(_laserShot[0]);
         //_audioSource.mute = false;
     }
 
@@ -425,6 +465,7 @@ public class Player : MonoBehaviour
                     _uiManager.SetShield(_shieldsAmount);
                     _uiManager.UpdateShields(_shieldsAmount);
                     Debug.Log("Decrease Shield");
+
                 }
                 else if (!isShieldBoostActive)
                 {
