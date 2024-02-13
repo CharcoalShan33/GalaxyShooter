@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 8015609660917772156}
   - component: {fileID: 2711004985223951266}
   - component: {fileID: 5739890308097967167}
-  - component: {fileID: -4732066210492469000}
-  - component: {fileID: 1610568120151914340}
+  - component: {fileID: 9222367416421780942}
+  - component: {fileID: 1554207397152233591}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -330,7 +330,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-4732066210492469000
+--- !u!114 &9222367416421780942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -342,11 +342,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fa6f0466ee304cefa5aa369dea1da4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enSpeed: 2.28
+  _enSpeed: 3.14
   moveID: 3
   _enemyBullet: {fileID: 0}
   _enemyFireRate: 0.5
---- !u!114 &1610568120151914340
+  delayTime: 0
+--- !u!114 &1554207397152233591
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -355,10 +356,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6461591961409154123}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dd3c1193eabd45ed858324a40daead5, type: 3}
+  m_Script: {fileID: 11500000, guid: 102087816bc5d40c190131fa28c881fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 346749681250337973, guid: dca799af7df384bac9f31298006e1115, type: 3}
-  frequency: 5.44
-  amplitude: 5.48
-  value: 0.5
+  frequency: 0.43
+  amplitude: 0.58
+  value: 1.57

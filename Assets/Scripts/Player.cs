@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        //_spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _shieldRend = transform.Find("Shield").GetComponentInChildren<SpriteRenderer>();

@@ -27,8 +27,7 @@ public class SpawnManager : MonoBehaviour
     //[SerializeField]
     //float timer = 0.0f;
 
-    [SerializeField]
-    bool isHorizontal;
+   
    
     // Start is called before the first frame update
     void Start()
@@ -62,11 +61,17 @@ public class SpawnManager : MonoBehaviour
             
                 //Vector2 randomEnemyPosition = new Vector2(Random.Range(-14f, 14f), Random.Range(-7f,7f));
 
-                Quaternion rotateNew = Quaternion.Euler(0f, 0f, Random.Range(-20f, 20f));
-                Vector2 enemyPosition = new Vector2(Random.Range(-8f, 8f), 7);
-                GameObject NewEnemy = Instantiate(_enemyObject, enemyPosition, rotateNew);
-                NewEnemy.transform.parent = _enemyContainer.transform;
+            Quaternion rotateNew = Quaternion.Euler(0f, 0f, Random.Range(-20f, 20f));
+            Vector2 enemyPosition = new Vector2(Random.Range(-8f, 8f), 7);
+            GameObject NewEnemy = Instantiate(_enemyObject, enemyPosition, rotateNew);
+            NewEnemy.transform.parent = _enemyContainer.transform;
+            //GameObject newEnemy = SpawningPool.Instance.RetrieveObject("Enemy");
+            //_enemyObject = newEnemy;
            
+            
+            
+            
+
             yield return new WaitForSeconds(5.0f);
 
         }
@@ -107,13 +112,12 @@ public class SpawnManager : MonoBehaviour
     public void StartSpawning()
     {
         enabled = true;
-        StartCoroutine(EnemySpawning());
+        //StartCoroutine(EnemySpawning());
         StartCoroutine(SpawnPowerUp());
-      
-
+       
     }
 
-
+    
 
     public void OnPlayerDeath()
     {

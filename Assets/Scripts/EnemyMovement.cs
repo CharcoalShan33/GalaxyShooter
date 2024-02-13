@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     int moveID;
 
+    EnemyMovement mainEnemy;
    
     private Player _player;
 
@@ -40,9 +41,8 @@ public class EnemyMovement : MonoBehaviour
 
     private float _angle;
 
+    private int moveDefault = 3;
 
-
-    [Header("Shield")]
 
 
     ControlMovement ctrlMove;
@@ -52,8 +52,13 @@ public class EnemyMovement : MonoBehaviour
 
     // Start is called before the first frame update
 
+    [SerializeField]
+    float delayTime;
+
     private void Awake()
     {
+        mainEnemy = this;
+        
         //_playerTransform = GameObject.FindWithTag("Player").transform;
     }
     void Start()
@@ -65,6 +70,8 @@ public class EnemyMovement : MonoBehaviour
         _audioExplode = GetComponent<AudioSource>();
 
         _player = GameObject.Find("Player").GetComponent<Player>();
+
+        gameObject.SetActive(true);
 
         if (_enemyAnim == null)
         {
@@ -86,6 +93,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
         ctrlMove.enabled = true;
+        moveID = moveDefault;
     }
     // Update is called once per frame
     public void Update()
@@ -114,7 +122,7 @@ public class EnemyMovement : MonoBehaviour
             transform.position = new Vector2(14, 0);
         }
 
-
+       
         //FacePlayer();
         //EnemyFire();
     }
@@ -148,11 +156,11 @@ public class EnemyMovement : MonoBehaviour
     void BasicMovement()
     {
         
-        transform.Translate(Vector3.down * _enSpeed * Time.deltaTime);
+        transform.Translate(_enSpeed * Time.deltaTime * Vector3.down);
     }
     void OtherMovement()
     {
-        transform.Translate(Vector3.right * _enSpeed * Time.deltaTime);
+        transform.Translate(_enSpeed * Time.deltaTime * Vector3.right);
         
     }
 
@@ -222,6 +230,8 @@ public class EnemyMovement : MonoBehaviour
             {
                 _player.AddScore(10);
             }
+
+
             ctrlMove.enabled = false;
             _enemyAnim.SetTrigger("OnEnemyDeath");
             _enSpeed = 0f;
@@ -229,11 +239,30 @@ public class EnemyMovement : MonoBehaviour
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 2.4f);
 
+
         }
 
 
 
     }
 
+   void DelayDeath()
+    {
+        ctrlMove.enabled = false;
+        _enemyAnim.SetTrigger("OnEnemyDeath");
+        _enSpeed = 0f;
+        _audioExplode.Play();
+        Destroy(GetComponent<Collider2D>());
+        Destroy(gameObject);
+        
+       
+     
+        
+       
+    }
 
+   void DodgeLasers()
+    {
+
+    }
 }

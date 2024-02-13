@@ -53,6 +53,7 @@ public class PoolManager : MonoBehaviour
                 obj.transform.parent = bulletContainer.transform;
                 obj.SetActive(false);
                 pooledObjects.Add(obj);
+
             }
         }
     }

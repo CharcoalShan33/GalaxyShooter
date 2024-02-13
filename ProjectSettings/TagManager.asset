@@ -13,6 +13,10 @@ TagManager:
   - Laser1
   - Laser2
   - Laser3
+  - Puzzle
+  - Projectile
+  - Door
+  - Layout
   layers:
   - Default
   - TransparentFX

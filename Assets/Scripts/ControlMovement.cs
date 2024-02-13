@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ControlMovement : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject target;
+  
 
     [SerializeField]
     float frequency;
@@ -29,7 +28,7 @@ public class ControlMovement : MonoBehaviour
         movePos = transform.position;
 
 
-        target = GameObject.FindGameObjectWithTag("Player");
+        //target = GameObject.FindGameObjectWithTag("Player");
         value = transform.position.y;
     }
 
