@@ -28,8 +28,11 @@ public class CameraShake : MonoBehaviour
 
     private void Start()
     {
+        //Shake Position
         shakePos = Vector3.one;
+        //Starting Position
         originalPos = Vector3.zero;
+        //Shake Rotattion
         shakeRot = Vector3.one;
         duration = magnitude = frequency = 0;
 
@@ -40,20 +43,23 @@ public class CameraShake : MonoBehaviour
 
     private void Update()
     {
-        shakeID = Mathf.Clamp(shakeID, 1, 2);
+        shakeID = Mathf.Clamp(shakeID, 1, 4);
 
         magnitude = Mathf.Clamp01(magnitude);
 
         frequency = Mathf.Clamp(frequency, 0, 35);
 
-      
+      if(duration <=0)
+        {
+            duration = 0;
+        }
 
         switch (shakeID)
         {
             case 1:
                 if (duration > 0)
                 {
-                    Shake();
+                    Shake1();
                     duration -= Time.deltaTime;
                 }
 
@@ -75,19 +81,53 @@ public class CameraShake : MonoBehaviour
                 }
                 break;
 
+            case 3:
+                if (duration > 0)
+                {
+                    Shake2();
+                    duration -= Time.deltaTime;
+                }
+                else
+                {
+                    transform.localPosition = originalPos;
+                }
+                break;
+
+
+            case 4:
+                if (duration > 0)
+                {
+                    Quake();
+                    duration -= Time.deltaTime;
+                }
+                else
+                {
+                    transform.localPosition = originalPos;
+                }
+                break;
+
         }
     }
 
-    void Shake()
+    void Shake1()// Horizontal Shake
     {
         transform.localPosition = new Vector3(shakePos.x * Mathf.PerlinNoise(0.0f, Time.time * frequency), 0, 0) * magnitude ;
         //Transform Local positions for X and Y Axis only.
     }
 
-    void ImpactHit()
+    void ImpactHit() // Rotational Shake
     {
         transform.localRotation = Quaternion.Euler(new Vector3(0, 0, shakeRot.z * Mathf.PerlinNoise(0f, Time.time * frequency))* magnitude) ;
         // Rotation is for Z axis only.
+    }
+
+    void Shake2() // Vertical Shake
+    {
+        transform.localPosition = new Vector3(0, shakePos.y * Mathf.PerlinNoise(Time.time * frequency, 0.0f), 0) * magnitude;
+    }
+    void Quake()
+    {
+        transform.localPosition = new Vector3(shakePos.x * Mathf.PerlinNoise(0.0f, Time.time * frequency), shakePos.y * Mathf.PerlinNoise(Time.time * frequency, 0.0f), 0) * magnitude;
     }
 
     public void Tremor(float intensity, float speed, float timeAmount, int type)

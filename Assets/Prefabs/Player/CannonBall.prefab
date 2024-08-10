@@ -15,11 +15,11 @@ GameObject:
   - component: {fileID: 6953440822829977910}
   m_Layer: 8
   m_Name: CannonBall
-  m_TagString: Laser2
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4108485228733395987
 Transform:
   m_ObjectHideFlags: 0
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1124339465
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: ba6b894ce3b934d7e886beaf143574fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -97,10 +97,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6139277353106406704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a4bec158e1d14b35a00ac17d8e71758, type: 3}
+  m_Script: {fileID: 11500000, guid: 26099b5e0f11f4105870f109adf0e9fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bcSpeed: 2
+  _bcSpeed: 3
 --- !u!50 &7200733288543735025
 Rigidbody2D:
   serializedVersion: 4

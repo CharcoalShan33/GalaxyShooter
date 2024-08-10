@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     float coolDownSeconds;
 
-    [SerializeField]
+   
     float maxCoolDown = 5f;
 
     [Header("Thruster")]
@@ -56,12 +56,7 @@ public class UIManager : MonoBehaviour
     TMP_Text _ammoText;
 
 
-    [SerializeField]
-    int _maxValue = 50;
-    [SerializeField]
-    int _currentValue = 15;
-
-
+  
 
     [Header("Shield")]
 
@@ -77,6 +72,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     Image fill;
 
+    Player play;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +81,7 @@ public class UIManager : MonoBehaviour
 
         shieldText.text = 0.ToString();
 
-        
+        play = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         _gameOverText.gameObject.SetActive(false);
 
@@ -96,17 +93,15 @@ public class UIManager : MonoBehaviour
         _cFiller.gameObject.SetActive(false);
         maxCoolDown = _cFiller.maxValue;
         _cFiller.value = maxCoolDown;
-
-
-        
+        //UpdateAmmo();
+        _charge = _chargeBar.maxValue;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
-
+        UpdateAmmo();
 
         _timeText.text = coolDownSeconds.ToString("0.0");
 
@@ -122,7 +117,6 @@ public class UIManager : MonoBehaviour
         }
 
     }
-
     float CountDown()
     {
         return maxCoolDown - coolDownSeconds;
@@ -147,7 +141,6 @@ public class UIManager : MonoBehaviour
             isCharging = false;
         }
     }
-
     // makes the charge value go up or down.
 
     IEnumerator ChargeThrust()
@@ -166,7 +159,6 @@ public class UIManager : MonoBehaviour
 
         }
     }
-
     public void UpdateShields(int currentShield)
     {
 
@@ -179,8 +171,6 @@ public class UIManager : MonoBehaviour
         _score_Text.text = playerScore.ToString();
     }
 
-
-
     public void UpdateLives(int currentLives)
     {
         _livesImage.sprite = lifeSprites[currentLives];
@@ -191,29 +181,28 @@ public class UIManager : MonoBehaviour
         }
 
     }
-
-    public void UpdateAmmo(int reload)
+    public void UpdateAmmo()
     {
+        _ammoText.text = "Ammo: " + play.currentAmmo + " / " + play.maxAmmo + " | " + " Storage: " + play.currentReserve + " / " + play.maxReserve;
 
-        //_ammoText.text = reload.ToString();
-        _currentValue = reload;
-        _ammoText.text = "Ammo: " + _currentValue + "/" + _maxValue;
-
-
-        if (_currentValue <= 5 && _currentValue > 0 )
+        if (play.currentAmmo <= 5 && play.currentAmmo > 0)
         {
             StartCoroutine(Blink());
         }
-       
-        else if(_currentValue > 5)
+
+        else if (play.currentAmmo > 5)
         {
             _ammoText.color = Color.white;
 
         }
-
-
-
+        
     }
+ //_ammoText.text = $"{play.currentAmmo} / {play.maxAmmo} | {play.currentReserve} / {play.maxReserve}";
+ //_ammoText.text = reload.ToString();
+        //_currentValue = reload;
+        //_ammoText.text = "Ammo: " + _currentValue + "/" + _maxValue;
+
+    
 
     IEnumerator Blink()
     {
@@ -226,9 +215,9 @@ public class UIManager : MonoBehaviour
             _ammoText.color = Color.white;
             yield return new WaitForSeconds(.1f);
 
-           if(_currentValue <= 0)
+           if(play.currentAmmo <= 0)
            {
-                yield return StartCoroutine(StopBlink());
+               yield return StartCoroutine(StopBlink());
                yield break;
             }
         }

@@ -7,16 +7,9 @@ TagManager:
   - Meteor
   - Laser
   - Enemy
-  - Enemy Laser
   - Explosion
   - Collectable
-  - Laser1
-  - Laser2
-  - Laser3
-  - Puzzle
-  - Projectile
-  - Door
-  - Layout
+  - EnemyLaser
   layers:
   - Default
   - TransparentFX
@@ -53,4 +46,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BG
+    uniqueID: 1243627109
+    locked: 0
+  - name: UI
+    uniqueID: 2972947107
+    locked: 0
+  - name: PowerUps
+    uniqueID: 470548463
+    locked: 0
+  - name: Enemy
+    uniqueID: 937212445
+    locked: 0
+  - name: Player
+    uniqueID: 1124339465
     locked: 0

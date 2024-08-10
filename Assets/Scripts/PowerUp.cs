@@ -28,7 +28,7 @@ public class PowerUp : MonoBehaviour
     private void Update()
     {
         transform.Translate(Vector2.down * _speed * Time.deltaTime);
-        if (transform.position.y < -8f)
+        if (transform.position.y < -9.3f)
         {
             Destroy(this.gameObject);
         }
@@ -40,8 +40,6 @@ public class PowerUp : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            
-
             Player player = other.transform.GetComponent<Player>();
             if (player != null)
             {
@@ -69,7 +67,7 @@ public class PowerUp : MonoBehaviour
                         break;
 
                     case 4:
-                        player.RefillAmmo();
+                        player.AddAmmo(player.maxReserve);
                         Debug.Log("Gained more ammo");
                         break;
 
@@ -78,22 +76,19 @@ public class PowerUp : MonoBehaviour
                         Debug.Log("The.....The Cannon!");
                         break;
 
-
                     case 6:
                         player.Negated();
                        
                         break;
-
-
                     case 7:
                         Debug.Log("Homing Missle!");
                         break;
                 }
                 
             }
-
+                
         }
-        Destroy(this.gameObject);
+       Destroy(gameObject);
         
     }
 }

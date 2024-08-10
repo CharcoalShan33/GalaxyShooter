@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class Player : MonoBehaviour
 {
     [Header("Shooting")]
@@ -10,25 +13,27 @@ public class Player : MonoBehaviour
     private float _timePassed;
 
 
-    [SerializeField]
-    int maxAmmo = 15;
-
-    [SerializeField]
-    int currentAmmo = 0;
+    public int currentAmmo, maxAmmo = 15;
+    // current Ammo is the hold amount of the mags
+    // Max Ammo is the mag amount
+    public int currentReserve, maxReserve = 50;
+    // Max Ammo is the number that will be reloaded and taken from the reserves.
+    // Max Reserve is how many can be stored fully.
 
     bool isFiring;
 
-    //[SerializeField]
-    // int maxAmmoStorage = 50;
-
     [Header("Player")]
 
+    // default speed
     [SerializeField]
     private float _pSpeed = 7.0f;
 
     [SerializeField]
     private GameObject _missle;
 
+    SpriteRenderer spriteRend;
+
+    [Header("Weapons")]
     [SerializeField]
     GameObject shootPoint;
 
@@ -41,6 +46,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject homingMissle;
 
+    [Header("Active Functions")]
 
     private bool _isTripleShotActive;
 
@@ -49,6 +55,8 @@ public class Player : MonoBehaviour
     private bool isShieldBoostActive;
 
     private bool isNewFireActive;
+
+    [SerializeField] GameObject explodeObject;
 
 
     [Header("UI Elements")]
@@ -71,6 +79,16 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _rightHitShip;
+
+    [Header("Magnet")]
+
+    [SerializeField]
+    GameObject visualizer;
+
+    public bool isMagnetActive = false;
+
+    [SerializeField]
+    float magnetRadius;
 
 
     [Header("Sound")]
@@ -101,22 +119,29 @@ public class Player : MonoBehaviour
     GameObject _thrusters;
 
     [SerializeField]
-    private float minSpeed = 5f;
+    int chargeCount = 1;
+
+    bool _isThrustBoostOn;
+
+    bool _stopCharge;
 
     [SerializeField]
-    private float maxSpeed = 10f;
+    float _shiftSpeed = 3.0f;
 
-    private float speedMulitiplier = 2.5f;
+    private float minSpeed = 7f;
+    // private float maxSpeed = 10f;
+
+
+    // for the speed powerup
+    private float speedMulitiplier = 1.5f;
 
     //[serializeField] private GameObject effect;
-
-
 
     // Start is called before the first frame update
 
     void Start()
     {
-        //_spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _shieldRend = transform.Find("Shield").GetComponentInChildren<SpriteRenderer>();
@@ -141,25 +166,30 @@ public class Player : MonoBehaviour
             Debug.Log("Null. Check if component has a parent");
         }
 
+        spriteRend = GetComponent<SpriteRenderer>();
+        if (spriteRend == null)
+        {
+            Debug.LogError("The renderer is not found! Add a SpriteRenderer source component.");
+        }
+
+
+
         _thrusters.gameObject.transform.localScale = new Vector3(.18f, .18f, .18f);
 
         _leftHitShip.SetActive(false);
         _rightHitShip.SetActive(false);
-
-        _uiManager.UpdateAmmo(maxAmmo);
-
-
-
         // effect.SetActive(false);
-        _pSpeed = 7.0f;
+        _pSpeed = minSpeed;
 
         currentAmmo = maxAmmo;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         CalculateMovement();
+        SpeedUp();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _timePassed)
         {
@@ -171,32 +201,85 @@ public class Player : MonoBehaviour
             currentAmmo = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.M) && Time.time > _timePassed)
-        {
-            FireMissle();
-        }
+        
 
         if (Input.GetKeyDown(KeyCode.C))
         {
             AttractMagnet();
         }
+
+        if (Input.GetKeyDown(KeyCode.N) && currentAmmo <= 0 && currentReserve > 0)
+        {
+
+            RefillAmmo();
+        }
+
+
+        if (currentReserve <= 0)
+        {
+
+            currentReserve = 0;
+
+        }
+
+    }
+
+    public void SpeedUp()
+    {
+        if (Input.GetKeyDown(KeyCode.RightShift) && !isSpeedBoostActive && !_isThrustBoostOn && !_stopCharge)
+        {
+            _pSpeed += _shiftSpeed;
+
+            _isThrustBoostOn = true;
+
+            _uiManager.Charge();
+            _thrusters.gameObject.transform.localScale = new Vector3(.3f, .3f, 0f);
+
+            if (chargeCount > 2)
+            {
+
+                StartCoroutine(StopAllCharge());
+            }
+
+        }
+        else if (Input.GetKeyUp(KeyCode.RightShift) && _isThrustBoostOn && !_stopCharge)
+        {
+            _pSpeed -= _shiftSpeed;
+
+            _isThrustBoostOn = false;
+            _uiManager.CancelCharge();
+
+            _thrusters.gameObject.transform.localScale = new Vector3(.2f, .2f, 0f);
+
+            chargeCount++;
+            if (chargeCount > 2)
+            {
+               
+                StartCoroutine(StopAllCharge());
+            }
+        }
+
+
+    }
+
+    IEnumerator StopAllCharge()
+    {
+        _stopCharge = true;
+        _thrusters.gameObject.transform.localScale = new Vector3(.17f, .17f, 0f);
+        _uiManager.StartCountTimer(5);
+        yield return new WaitForSeconds(5.1f);
+        _uiManager.StopCountDown();
+        chargeCount = 0;
+        _stopCharge = false;
+
     }
 
     void AttractMagnet()
     {
         //foreach;
     }
-
-    void FireMissle()
-    {
-        isFiring = true;
-        _timePassed = Time.time + _fireRate;
-        if (currentAmmo > 0)
-        {
-            PlaySFXClip(_laserShot[0]);
-            Instantiate(homingMissle, shootPoint.transform.position, transform.rotation);
-        }
-    }
+    
+   
 
     void FireLaser()
     {
@@ -209,54 +292,26 @@ public class Player : MonoBehaviour
         _timePassed = Time.time + _fireRate;
 
         currentAmmo--;
+        _uiManager.UpdateAmmo();
 
         if (currentAmmo > 0)
         {
             PlaySFXClip(_laserShot[0]);
 
-            GameObject bullet1 = PoolManager.Instance.RetrieveObject("Laser");
-            _missle = bullet1;
-            if (bullet1 != null)
-            {
-                bullet1.transform.position = shootPoint.transform.position;
-                bullet1.transform.rotation = shootPoint.transform.rotation;
-                bullet1.SetActive(true);
-            }
-
-
-            //Instantiate(_missle, shootPoint.transform.position, Quaternion.identity);
+            Instantiate(_missle, shootPoint.transform.position, Quaternion.identity);
 
             if (_isTripleShotActive == true)
             {
-                GameObject bullet2 = PoolManager.Instance.RetrieveObject("Laser1");
-                tripleShotMissle = bullet2;
-                if (bullet2 != null)
-                {
-                    bullet2.transform.position = shootPoint.transform.position;
-                    bullet2.transform.rotation = shootPoint.transform.rotation;
-                    bullet2.SetActive(true);
-                    bullet1.SetActive(false);
-                }
-                //Instantiate(tripleShotMissle, shootPoint.transform.position, Quaternion.identity);
+
+                Instantiate(tripleShotMissle, shootPoint.transform.position, Quaternion.identity);
             }
 
             if (isNewFireActive == true)
             {
-
-                GameObject bullet3 = PoolManager.Instance.RetrieveObject("Laser2");
-                _cannon = bullet3;
-                if (bullet3 != null)
-                {
-                    bullet3.transform.position = shootPoint.transform.position;
-                    bullet3.transform.rotation = shootPoint.transform.rotation;
-                    bullet3.SetActive(true);
-                    bullet1.SetActive(false);
-                }
-
-                //Instantiate(_cannon, shootPoint.transform.position, Quaternion.identity);
+                Instantiate(_cannon, shootPoint.transform.position, Quaternion.identity);
             }
 
-            _uiManager.UpdateAmmo(currentAmmo);
+           
         }
         else if (currentAmmo <= 0 && isFiring)
         {
@@ -265,8 +320,9 @@ public class Player : MonoBehaviour
 
             PlaySFXClip(_laserShot[1]);
 
-            _uiManager.UpdateAmmo(0);
+           
         }
+
     }
 
     void Shake()
@@ -316,14 +372,17 @@ public class Player : MonoBehaviour
         }
         Shake();
 
+
         lives--;
 
         if (lives == 2)
         {
+
             _rightHitShip.SetActive(true);
         }
         if (lives == 1)
         {
+
             _leftHitShip.SetActive(true);
         }
 
@@ -332,20 +391,21 @@ public class Player : MonoBehaviour
         if (lives <= 0)
         {
             lives = 0;
-            Destroy(this.gameObject);
+
+            Instantiate(explodeObject, transform.position, Quaternion.identity);
+
+            gameObject.SetActive(false);
+            Destroy(this.gameObject, 2.3f);
             Debug.Log("I am Destroyed");
             _spawnManager.OnPlayerDeath();
         }
-        else
-        {
-            Debug.Log("I am hit");
-        }
+
     }
 
     public void NewFireActive()
     {
-        //tripleShotMissle.SetActive(false);
-        //_missle.SetActive(false);
+       
+       _missle.SetActive(false);
         _cannon.SetActive(true);
         isNewFireActive = true;
         StartCoroutine(NewFire());
@@ -355,7 +415,7 @@ public class Player : MonoBehaviour
     {
         tripleShotMissle.SetActive(true);
         //_cannon.SetActive(false);
-        //_missle.SetActive(false);
+        _missle.SetActive(false);
         _isTripleShotActive = true;
         StartCoroutine(TripleShotCountDown());
     }
@@ -383,14 +443,14 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         _isTripleShotActive = false;
         tripleShotMissle.SetActive(false);
-        //_missle.SetActive(true);
+        _missle.SetActive(true);
     }
     IEnumerator NewFire()
     {
         yield return new WaitForSeconds(5f);
         isNewFireActive = false;
         _cannon.SetActive(false);
-        //_missle.SetActive(true);
+        _missle.SetActive(true);
     }
 
     IEnumerator SpeedCountDown()
@@ -432,19 +492,48 @@ public class Player : MonoBehaviour
 
     public void RefillAmmo()
     {
-        currentAmmo = maxAmmo;
-        _uiManager.UpdateAmmo(maxAmmo);
+
+        int reloadAmt = currentAmmo;
+
+        if (currentReserve >= (maxAmmo - reloadAmt))
+        {
+
+            currentAmmo += (maxAmmo - reloadAmt);
+
+            currentReserve -= (maxAmmo - reloadAmt);
+
+        }
+        else
+        {
+            currentAmmo = currentReserve;
+            currentReserve = 0;
+        }
+
+        _uiManager.UpdateAmmo();
+
+
         isFiring = true;
-        //PlaySFXClip(_laserShot[0]);
-        //_audioSource.mute = false;
+        PlaySFXClip(_laserShot[2]);
+        _audioSource.mute = false;
     }
 
+    public void AddAmmo(int amount)
+    {
+        currentReserve += amount;
+        if (currentReserve > maxReserve)
+        {
+            currentReserve = maxReserve;
+        }
+
+
+
+    }
     public void Negated()
     {
 
-        int randomEffect = Random.Range(1, 4);
+        int randomValue = Random.Range(1, 4);
 
-        switch (randomEffect)
+        switch (randomValue)
         {
             case 1:
                 _pSpeed = 2;
@@ -467,7 +556,7 @@ public class Player : MonoBehaviour
                     Debug.Log("Decrease Shield");
 
                 }
-                else if (!isShieldBoostActive)
+                if (!isShieldBoostActive)
                 {
                     if (_score > 0)
                     {
@@ -479,8 +568,10 @@ public class Player : MonoBehaviour
                 break;
 
             case 3:
+
                 currentAmmo -= 5;
-                _uiManager.UpdateAmmo(currentAmmo);
+                currentReserve -= 5;
+                _uiManager.UpdateAmmo();
                 Debug.Log("Decrease ammo");
                 break;
         }
@@ -491,4 +582,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         _pSpeed = minSpeed;
     }
+
+
+    
 }

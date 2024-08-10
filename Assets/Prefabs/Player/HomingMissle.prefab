@@ -15,11 +15,11 @@ GameObject:
   - component: {fileID: 401340638844489794}
   m_Layer: 8
   m_Name: HomingMissle
-  m_TagString: Laser3
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5934759133481117935
 Transform:
   m_ObjectHideFlags: 0
@@ -154,5 +154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb06cd2c887404dafa61c3d3a11b2605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fireSpeed: 6.3
-  _rotateSpeed: 180
+  _fireSpeed: 11.76
+  _shootPoint: {fileID: 7833464202725598182, guid: dca799af7df384bac9f31298006e1115, type: 3}
+  _rotateSpeed: 300
+  _detectRadius: 6.63
+  mask:
+    serializedVersion: 2
+    m_Bits: 128
