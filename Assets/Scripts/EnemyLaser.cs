@@ -13,7 +13,7 @@ public class EnemyLaser : MonoBehaviour
 
 
 
-   // private Vector3 direction;
+    // private Vector3 direction;
     private void Start()
     {
         rig = GetComponent<Rigidbody2D>();
@@ -21,12 +21,12 @@ public class EnemyLaser : MonoBehaviour
     }
     void Update()
     {
-     
+
         transform.Translate(_speed * Time.deltaTime * Vector3.down);
 
-        
-        //Destroy(gameObject, 2f);
-        
+
+        Destroy(gameObject, 2f);
+
     }
 
 
@@ -40,9 +40,5 @@ public class EnemyLaser : MonoBehaviour
         }
     }
 
-    private void OnBecameInvisible()
-    {
-        rend.gameObject.SetActive(false);
-        Destroy(gameObject);
-    }
+
 }
