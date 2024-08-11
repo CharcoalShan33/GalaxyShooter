@@ -9,11 +9,32 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed;
 
-    /// bool canFlip;
+    Quaternion rotate;
+    bool switchDirection = true;
+    bool canFlipX;
+    bool canFlipY;
     //int randomMovement;
 
-    // public enum moveType { vWave, hWave, };
-    //public moveType currentMovement;
+    public enum MoveType { LinearH, LinearV, Sine, Cosine };
+    public MoveType currentMovement;
+
+
+
+    [SerializeField]
+    float frequency;
+
+    [SerializeField]
+    float amplitude = 1f;
+    // amplitude is the height of the wave
+    // frequency is the amount of fluctuation/ how fast the wave moves
+
+    Vector3 movePos = Vector3.zero;
+
+    // value is the offset or the placement value along the axis.
+
+    [SerializeField]
+    float value;
+
 
     [Header("Enemy Types")]
 
@@ -29,6 +50,7 @@ public class Enemy : MonoBehaviour
     private bool didCollide;
     private Animator _enemyAnim;
     private Player _player;
+    private SpriteRenderer rend;
     private AudioSource _audioExplode = null;
     private bool stopMoving;
     [Header("Shield")]
@@ -46,8 +68,6 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private bool ableToShoot;
-
-    public bool isBeam;
 
     [SerializeField]
     private GameObject _enemyLaser;
@@ -77,7 +97,7 @@ public class Enemy : MonoBehaviour
 
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
 
-
+        rend = GetComponent<SpriteRenderer>();
         if (_enemyAnim == null)
         {
             Debug.LogError("Add an Animator component");
@@ -89,40 +109,57 @@ public class Enemy : MonoBehaviour
 
         if (spriteShield == null)
         {
-            Debug.LogError("Find the Audio Source Component");
+            Debug.LogError("Find the Sprite Shield Source Component");
         }
 
         if (_audioExplode == null)
         {
             Debug.LogError("Find the Audio Source Component");
         }
+        if (rend == null)
+        {
+            Debug.LogError("Find the SpriteRenderer Component");
+        }
+
         _enemyFireRate = Mathf.Clamp(_enemyFireRate, 1f, 4f);
         _speed = defaultSpeed;
 
-        Freeze();
+        // Freeze();
+
+        movePos = transform.position;
     }
 
 
     private void Update()
     {
-        BasicMovement();
 
-        if (transform.position.y < -7f)
+        // BasicMovement();
+
+        transform.rotation = rotate;
+
+        if (switchDirection)
         {
-            float randomX = Random.Range(-14f, 14f);
-            transform.position = new Vector2(randomX, 7);
+
+            HorizontalMovement();
         }
+
+        if (!switchDirection)
+        {
+
+            VerticalMovement();
+        }
+
+
+
+
+
+
 
         if (ableToShoot)
         {
-            if (!isBeam)
-            {
-                EnemyFire();
-            }
-            else if (isBeam)
-            {
-                StartCoroutine(LaserBeam());
-            }
+
+            EnemyFire();
+
         }
 
         switch (currentEnemyType)
@@ -135,37 +172,160 @@ public class Enemy : MonoBehaviour
 
 
             case EnemyTypes.Shielded:
+
                 isShieldActive = true;
                 _shield.SetActive(true);
                 break;
         }
+
+
+        switch (currentMovement)
+        {
+            case MoveType.LinearH:
+
+                switchDirection = true;
+
+                break;
+
+
+            case MoveType.LinearV:
+
+                switchDirection = false;
+
+                break;
+
+
+            case MoveType.Sine:
+
+                switchDirection = true;
+               
+                    movePos = transform.position;
+                    movePos.y += Mathf.Sin(Time.time * frequency + value) * amplitude * Time.deltaTime;
+                    transform.position = movePos;
+               
+
+
+                break;
+
+            case MoveType.Cosine:
+                switchDirection = false;
+                movePos = transform.position;
+                movePos.x += Mathf.Cos(Time.time * frequency + value) * amplitude * Time.deltaTime;
+                transform.position = movePos;
+
+                break;
+
+
+
+        }
+
+
+
+
     }
 
     void EnemyFire()
     {
-
-
         Vector3 offset = new(0f, -0.9f, 0f);
-
         if (Time.time > _nextFire)
         {
             _nextFire = Time.time + _enemyFireRate;
             Instantiate(_enemyBullet, firePos.position + offset, Quaternion.identity);
         }
+    }
 
 
+    void HorizontalMovement()
+    {
+       // switchDirection = true;
+
+        if (canFlipX == true)
+
+        {
+            MoveLeft();
+            transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+
+        }
+
+        else if (canFlipX == false)
+        {
+            MoveRight();
+            transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+
+        }
+
+
+        if (transform.position.x >= 14f)
+        {
+
+            canFlipX = true;
+           
+             
+        }
+
+        if (transform.position.x <= -14f)
+        {
+            canFlipX = false;
+            
+           // transform.Rotate(Vector3.forward * 90f);
+        }
 
     }
 
-    IEnumerator LaserBeam()
+    void VerticalMovement()
     {
+     
+       // switchDirection = false;
+        if (canFlipY == true)
 
-        _enemyLaser.SetActive(false);
-        yield return new WaitForSeconds(_enemyFireRate);
+        {
+            MoveUp();
+            transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
-        Vector3 offset = new(0f, -0.9f, 0f);
-        _enemyLaser.SetActive(true);
-        Instantiate(_enemyLaser, firePos.position + offset, Quaternion.identity);
+        }
+
+        else if (canFlipY == false)
+        {
+            MoveDown();
+            transform.rotation = Quaternion.identity;
+
+        }
+
+
+        if (transform.position.y >= 7f)
+        {
+
+            canFlipY = false;
+            
+        }
+
+        if (transform.position.y <=  -7f)
+        {
+
+            canFlipY = true;
+            
+        }
+
+    }
+
+    void MoveUp()
+    {
+        transform.Translate(Vector3.up * _speed * Time.deltaTime);
+    }
+    void MoveDown()
+    {
+        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+    }
+
+
+
+    void MoveLeft()
+    {
+        transform.Translate(_speed * Time.deltaTime * Vector3.left);
+    }
+    void MoveRight()
+    {
+        transform.Translate(_speed * Time.deltaTime * Vector3.right);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -208,11 +368,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void BasicMovement()
-    {
+    // void BasicMovement()
+    //{
 
-        transform.Translate(_speed * Time.deltaTime * Vector3.down);
-    }
+    // transform.Translate(_speed * Time.deltaTime * Vector3.down);
+    // }
 
 
 
