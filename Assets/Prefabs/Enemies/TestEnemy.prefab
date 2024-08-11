@@ -459,11 +459,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 1
+  switchDirection: 1
+  currentMovement: 2
+  frequency: 0.79
+  amplitude: 0.37
+  value: 0.69
   currentEnemyType: 1
   shieldHit: 2
   _shield: {fileID: 1482110175460804747}
-  ableToShoot: 1
-  isBeam: 1
+  ableToShoot: 0
   _enemyLaser: {fileID: 2185790920717756996, guid: 8ec9c6e052aef4412835d8e0be48406d, type: 3}
   _enemyBullet: {fileID: 4006620926156045993, guid: 4de859f357ecb4fbdb8fc291bab88681, type: 3}
   _enemyFireRate: 1
