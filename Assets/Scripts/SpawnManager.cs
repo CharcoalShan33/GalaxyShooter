@@ -63,8 +63,9 @@ public class SpawnManager : MonoBehaviour
             Quaternion rotateNew = Quaternion.Euler(0f, 0f, Random.Range(-20f, 20f));
 
             
-            Vector2 enemyPosition = new Vector2(Random.Range(-8f, 8f), 7);
-            GameObject NewEnemy = Instantiate(_enemyObject, enemyPosition, rotateNew);
+            Vector2 enemyPosition = new Vector2(Random.Range(-8f, 8f), 7);// for Vertical Movement
+            Vector2 enemyPosition2 = new Vector2(14f, Random.Range(-5.5f, 5.5f)); // Horizontal Movement
+            GameObject NewEnemy = Instantiate(_enemyObject, enemyPosition, Quaternion.identity);
             NewEnemy.transform.parent = _enemyContainer.transform;
 
             yield return new WaitForSeconds(5.0f);

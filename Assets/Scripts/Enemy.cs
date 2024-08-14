@@ -9,42 +9,33 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed;
 
-    Quaternion rotate;
-    bool switchDirection = true;
-    bool canFlipX;
-    bool canFlipY;
-    //int randomMovement;
 
+    bool switchDirection = true;
+     bool canFlipX = true;
+     bool canFlipY;
     public enum MoveType { LinearH, LinearV, Sine, Cosine };
+
     public MoveType currentMovement;
 
-
-
+    // frequency is the amount of fluctuation/ how fast the wave moves
     [SerializeField]
     float frequency;
 
     [SerializeField]
     float amplitude = 1f;
     // amplitude is the height of the wave
-    // frequency is the amount of fluctuation/ how fast the wave moves
-
-    Vector3 movePos = Vector3.zero;
-
+ 
     // value is the offset or the placement value along the axis.
-
     [SerializeField]
     float value;
-
+    Vector3 movePos = Vector3.zero;
 
     [Header("Enemy Types")]
 
     int randomType;
-
     public enum EnemyTypes { Normal, Shielded };
 
     public EnemyTypes currentEnemyType;
-
-
 
     private float defaultSpeed = 1.5f;
     private bool didCollide;
@@ -84,7 +75,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Transform firePos;
 
-
+     public Vector2 moveA = Vector2.left;
+     public Vector2 moveB = Vector2.right;
 
 
     private void Start()
@@ -124,10 +116,15 @@ public class Enemy : MonoBehaviour
         _enemyFireRate = Mathf.Clamp(_enemyFireRate, 1f, 4f);
         _speed = defaultSpeed;
 
+        currentMovement = MoveType.LinearH;
         // Freeze();
 
         movePos = transform.position;
-    }
+
+
+        moveA = Vector2.left;
+        moveB = Vector2.right;
+}
 
 
     private void Update()
@@ -135,25 +132,18 @@ public class Enemy : MonoBehaviour
 
         // BasicMovement();
 
-        transform.rotation = rotate;
 
         if (switchDirection)
         {
-
+            //NewMovementH();
             HorizontalMovement();
         }
 
         if (!switchDirection)
         {
-
+        
             VerticalMovement();
         }
-
-
-
-
-
-
 
         if (ableToShoot)
         {
@@ -198,13 +188,9 @@ public class Enemy : MonoBehaviour
             case MoveType.Sine:
 
                 switchDirection = true;
-               
-                    movePos = transform.position;
-                    movePos.y += Mathf.Sin(Time.time * frequency + value) * amplitude * Time.deltaTime;
-                    transform.position = movePos;
-               
-
-
+                movePos = transform.position;
+                movePos.y += Mathf.Sin(Time.time * frequency + value) * amplitude * Time.deltaTime;
+                transform.position = movePos;
                 break;
 
             case MoveType.Cosine:
@@ -212,11 +198,7 @@ public class Enemy : MonoBehaviour
                 movePos = transform.position;
                 movePos.x += Mathf.Cos(Time.time * frequency + value) * amplitude * Time.deltaTime;
                 transform.position = movePos;
-
                 break;
-
-
-
         }
 
 
@@ -237,58 +219,50 @@ public class Enemy : MonoBehaviour
 
     void HorizontalMovement()
     {
-       // switchDirection = true;
-
+        switchDirection = true;
+       
         if (canFlipX == true)
 
         {
-            MoveLeft();
-            transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+            MoveRight(); 
 
         }
-
-        else if (canFlipX == false)
+        if (canFlipX == false )
         {
-            MoveRight();
-            transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            MoveLeft();
 
         }
-
 
         if (transform.position.x >= 14f)
         {
 
-            canFlipX = true;
-           
-             
+            canFlipX = false;  
         }
 
         if (transform.position.x <= -14f)
         {
-            canFlipX = false;
-            
-           // transform.Rotate(Vector3.forward * 90f);
+
+            canFlipX = true;
         }
 
     }
 
     void VerticalMovement()
     {
-     
-       // switchDirection = false;
+      
+        switchDirection = false;
+        
         if (canFlipY == true)
 
         {
             MoveUp();
-            transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
         }
 
-        else if (canFlipY == false)
+       if (canFlipY == false)
         {
+           
             MoveDown();
-            transform.rotation = Quaternion.identity;
-
         }
 
 
@@ -296,36 +270,56 @@ public class Enemy : MonoBehaviour
         {
 
             canFlipY = false;
-            
+          
+
         }
 
-        if (transform.position.y <=  -7f)
+        if (transform.position.y <= -7f)
         {
-
             canFlipY = true;
             
         }
 
     }
 
-    void MoveUp()
+
+
+
+    void NewMovementH()
     {
-        transform.Translate(Vector3.up * _speed * Time.deltaTime);
+        float time = Mathf.PingPong(Time.time * _speed, 1f);
+        transform.position = Vector2.Lerp(moveA, moveB, time);
     }
+
+    void NewMovementV()
+    {
+
+
+
+
+    }
+
+
+
+
+    private void MoveUp()
+    {
+        transform.Translate(_speed * Time.deltaTime * Vector2.up);
+    }
+
     void MoveDown()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(_speed * Time.deltaTime * Vector2.down);
     }
-
-
 
     void MoveLeft()
     {
-        transform.Translate(_speed * Time.deltaTime * Vector3.left);
+        transform.Translate(_speed * Time.deltaTime * Vector2.left);
     }
-    void MoveRight()
+
+    private void MoveRight()
     {
-        transform.Translate(_speed * Time.deltaTime * Vector3.right);
+        transform.Translate(_speed * Time.deltaTime * Vector2.right );
     }
 
     private void OnTriggerEnter2D(Collider2D other)
