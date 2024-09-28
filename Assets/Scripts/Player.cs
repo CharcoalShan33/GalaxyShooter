@@ -82,9 +82,7 @@ public class Player : MonoBehaviour
 
     [Header("Magnet")]
 
-    [SerializeField]
-    GameObject visualizer;
-
+   
     public bool isMagnetActive = false;
 
     [SerializeField]
@@ -130,8 +128,6 @@ public class Player : MonoBehaviour
 
     private float minSpeed = 7f;
     // private float maxSpeed = 10f;
-
-
     // for the speed powerup
     private float speedMulitiplier = 1.5f;
 
@@ -203,9 +199,13 @@ public class Player : MonoBehaviour
 
         
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKey(KeyCode.C))
         {
             AttractMagnet();
+        }
+        if (Input.GetKeyUp(KeyCode.C) && isMagnetActive)
+        {
+            StopMagnet();
         }
 
         if (Input.GetKeyDown(KeyCode.N) && currentAmmo <= 0 && currentReserve > 0)
@@ -274,12 +274,19 @@ public class Player : MonoBehaviour
 
     }
 
-    void AttractMagnet()
+    public void AttractMagnet()
     {
+        isMagnetActive = true;
         //foreach;
+        _uiManager.UseMagnet();
     }
-    
-   
+    public void StopMagnet()
+    {
+        isMagnetActive = false;
+        //foreach;
+        _uiManager.DeactivateMagnet();
+    }
+
 
     void FireLaser()
     {
@@ -492,17 +499,16 @@ public class Player : MonoBehaviour
 
     public void RefillAmmo()
     {
-
         int reloadAmt = currentAmmo;
 
         if (currentReserve >= (maxAmmo - reloadAmt))
         {
-
             currentAmmo += (maxAmmo - reloadAmt);
 
             currentReserve -= (maxAmmo - reloadAmt);
 
         }
+
         else
         {
             currentAmmo = currentReserve;

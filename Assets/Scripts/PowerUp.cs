@@ -15,22 +15,35 @@ public class PowerUp : MonoBehaviour
 
     private Rigidbody2D rig;
 
+    Player _player;
     void Start()
     {
-        
         rig = GetComponent<Rigidbody2D>();
-
+        
         if(rig == null)
         {
             Debug.LogError("This Component is NULL.");
         }
+
+        _player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
     private void Update()
     {
-        transform.Translate(Vector2.down * _speed * Time.deltaTime);
-        if (transform.position.y < -9.3f)
+        if(_player.isMagnetActive)
         {
-            Destroy(this.gameObject);
+            transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _speed * Time.deltaTime);
+
+            if(powerUpId == 6 )
+            {
+                //transform.position = 
+            }
+        }
+        else if(_player.isMagnetActive == false)
+        { transform.Translate(Vector2.down * _speed * Time.deltaTime);
+            if (transform.position.y < -9.3f)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
   
@@ -38,7 +51,7 @@ public class PowerUp : MonoBehaviour
     {
         AudioSource.PlayClipAtPoint(_pClip, transform.position);
 
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             Player player = other.transform.GetComponent<Player>();
             if (player != null)
@@ -82,6 +95,10 @@ public class PowerUp : MonoBehaviour
                         break;
                     case 7:
                         Debug.Log("Homing Missle!");
+                        break;
+
+                    case 8:
+                        Debug.Log("Magnet Activated");
                         break;
                 }
                 

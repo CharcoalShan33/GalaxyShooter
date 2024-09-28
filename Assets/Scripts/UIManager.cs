@@ -21,12 +21,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private TMP_Text _restartText;
-
     private GameManager gameManager;
 
-
     [Header("Cool-Down")]
-
     [SerializeField]
     TMP_Text _timeText;
 
@@ -35,14 +32,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     float coolDownSeconds;
-
-   
     float maxCoolDown = 5f;
 
     [Header("Thruster")]
-
     float _charge;
-
     [SerializeField]
     Slider _chargeBar;
 
@@ -50,13 +43,9 @@ public class UIManager : MonoBehaviour
     bool isCharging;
 
     [Header("Reload")]
-
     // current ammo text
     [SerializeField]
     TMP_Text _ammoText;
-
-
-  
 
     [Header("Shield")]
 
@@ -71,8 +60,12 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     Image fill;
+    private Player play;
 
-    Player play;
+    [Header("Magnet")]
+
+    [SerializeField]
+    GameObject visualizer;
 
     // Start is called before the first frame update
     void Start()
@@ -90,6 +83,7 @@ public class UIManager : MonoBehaviour
         gameManager = GameObject.Find("game_manager").GetComponent<GameManager>();
 
         shieldSlider.gameObject.SetActive(false);
+
         _cFiller.gameObject.SetActive(false);
         maxCoolDown = _cFiller.maxValue;
         _cFiller.value = maxCoolDown;
@@ -195,44 +189,39 @@ public class UIManager : MonoBehaviour
             _ammoText.color = Color.white;
 
         }
-        
-    }
- //_ammoText.text = $"{play.currentAmmo} / {play.maxAmmo} | {play.currentReserve} / {play.maxReserve}";
- //_ammoText.text = reload.ToString();
-        //_currentValue = reload;
-        //_ammoText.text = "Ammo: " + _currentValue + "/" + _maxValue;
 
-    
+    }
+    //_ammoText.text = $"{play.currentAmmo} / {play.maxAmmo} | {play.currentReserve} / {play.maxReserve}";
+    //_ammoText.text = reload.ToString();
+    //_currentValue = reload;
+    //_ammoText.text = "Ammo: " + _currentValue + "/" + _maxValue;
+
+
 
     IEnumerator Blink()
     {
-       
         while (true)
         {
-          
             _ammoText.color = Color.yellow;
             yield return new WaitForSeconds(.1f);
             _ammoText.color = Color.white;
             yield return new WaitForSeconds(.1f);
-
-           if(play.currentAmmo <= 0)
-           {
-               yield return StartCoroutine(StopBlink());
-               yield break;
+            if (play.currentAmmo <= 0)
+            {
+                yield return StartCoroutine(StopBlink());
+                yield break;
             }
         }
-        
-        
+
+
     }
     IEnumerator StopBlink()
     {
         yield return new WaitForSeconds(.5f);
-         
+
         _ammoText.color = Color.red;
 
     }
-
-
 
     void GameOverSequence()
     {
@@ -272,7 +261,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     public void StartCountTimer(float count)
     {
         coolDownSeconds = count;
@@ -299,4 +287,16 @@ public class UIManager : MonoBehaviour
     }
 
 
+    public void UseMagnet()
+    {
+        visualizer.SetActive(true);
+        play.isMagnetActive = true;
+
+    }
+
+    public void DeactivateMagnet()
+    {
+        visualizer.SetActive(false);
+        play.isMagnetActive = false;
+    }
 }

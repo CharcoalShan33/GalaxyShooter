@@ -13,13 +13,13 @@ public class CameraShake : MonoBehaviour
 
 
     [SerializeField]
-    float duration = 0f; // how long the shake lasts. Lower the number, the shorter the time. 
+    float duration = 0f; // how long the shake lasts. The lower the number, the shorter the time. 
 
     [SerializeField]
     float magnitude = .5f; // how strong the shake. value from 0 to 1. IMPACT
 
     [SerializeField]
-    float frequency; // the speed in which the wave happens. Large number, Smaller waves.
+    float frequency; // the speed at which the wave happens. Large number, Smaller waves.
 
     [SerializeField]
     int shakeID;
@@ -32,7 +32,7 @@ public class CameraShake : MonoBehaviour
         shakePos = Vector3.one;
         //Starting Position
         originalPos = Vector3.zero;
-        //Shake Rotattion
+        //Shake Rotation
         shakeRot = Vector3.one;
         duration = magnitude = frequency = 0;
 

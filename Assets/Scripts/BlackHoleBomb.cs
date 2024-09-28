@@ -39,6 +39,8 @@ public class BlackHoleBomb : MonoBehaviour
             transform.localScale = Vector2.Lerp(transform.localScale, new(maxSize, maxSize), growSpeed * Time.deltaTime);
         }
 
+
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -47,6 +49,7 @@ public class BlackHoleBomb : MonoBehaviour
         {
 
             targets.Add(collision.gameObject);
+            
         }
     }
 

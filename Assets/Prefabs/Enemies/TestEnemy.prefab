@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &398875352
 Transform:
   m_ObjectHideFlags: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
   increase: 10
   growthSpeedT: 1
   growthSpeedA: 0.2
-  duration: 2
-  coolDown: 3.69
+  duration: 3
+  coolDown: 3
   cycleComplete: 0
 --- !u!50 &5253552365528023287
 Rigidbody2D:
@@ -607,7 +607,7 @@ MonoBehaviour:
   amplitude: 1
   value: 0.42
   currentEnemyType: 1
-  shieldHit: 2
+  shieldHit: 1
   _shield: {fileID: 1482110175460804747}
   ableToShoot: 0
   _enemyLaser: {fileID: 398875348}

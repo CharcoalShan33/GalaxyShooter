@@ -106,6 +106,8 @@ public class LaserBeamScript : MonoBehaviour
 
     IEnumerator GoRay()
     {
+
+        
         Debug.Log("GoRay Started");
         while (!done)
         {
@@ -113,10 +115,16 @@ public class LaserBeamScript : MonoBehaviour
             GrowRay();
             yield return null;
         }
+        Color newColor = Color.Lerp(Color.green, Color.red, .25f);
+          
         this.gameObject.GetComponent<Collider2D>().enabled = true;
-        spr.color = Color.red;
+       
+      spr.color = newColor;
+        // spr.color = Color.red;
         yield return new WaitForSeconds(duration);
-        spr.color = Color.green;
+        // spr.color = Color.green;
+        Color oldColor = Color.Lerp(Color.red, Color.green, .25f);
+        spr.color = oldColor;
         this.gameObject.GetComponent<Collider2D>().enabled = false;
         while (done)
         {
@@ -137,11 +145,13 @@ public class LaserBeamScript : MonoBehaviour
 
     void GrowRay()
     {
+        
         desiredA = 1;
         //done = false;
+
         currentA = Mathf.MoveTowards(currentA, desiredA, growthSpeedA * Time.deltaTime);
         col = new(0f, 1f, 0f, currentA);
-
+        
         spr.color = col;
 
         if (currentA == 1)
@@ -153,6 +163,9 @@ public class LaserBeamScript : MonoBehaviour
 
     }
 
+
+
+ 
 
     void StopRay()
     {

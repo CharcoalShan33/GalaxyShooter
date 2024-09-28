@@ -48,6 +48,7 @@ public class SpawnManager : MonoBehaviour
         */
       
     }
+    /*
     IEnumerator EnemySpawning()
     {
         yield return new WaitForSeconds(startTimeValue);
@@ -72,6 +73,7 @@ public class SpawnManager : MonoBehaviour
 
         }
     }
+    */
 
     IEnumerator SpawnPowerUp()
     {
@@ -102,7 +104,7 @@ public class SpawnManager : MonoBehaviour
     public void StartSpawning()
     {
         enabled = true;
-        StartCoroutine(EnemySpawning());
+        //StartCoroutine(EnemySpawning());
         StartCoroutine(SpawnPowerUp());
        
     }

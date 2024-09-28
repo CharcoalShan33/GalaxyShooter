@@ -121,10 +121,8 @@ public class Enemy : MonoBehaviour
 
         movePos = transform.position;
 
-
-        moveA = Vector2.left;
-        moveB = Vector2.right;
-}
+        
+    }
 
 
     private void Update()
@@ -151,13 +149,14 @@ public class Enemy : MonoBehaviour
             EnemyFire();
 
         }
+       
+
 
         switch (currentEnemyType)
         {
             case EnemyTypes.Normal:
 
-                isShieldActive = false;
-                _shield.SetActive(false);
+               
                 break;
 
 
@@ -282,22 +281,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-
-
-
-    void NewMovementH()
-    {
-        float time = Mathf.PingPong(Time.time * _speed, 1f);
-        transform.position = Vector2.Lerp(moveA, moveB, time);
-    }
-
-    void NewMovementV()
-    {
-
-
-
-
-    }
+   
 
 
 
@@ -327,17 +311,12 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("Laser"))
         {
             Destroy(other);
-            if (currentEnemyType == EnemyTypes.Shielded)
+           if(currentEnemyType == EnemyTypes.Shielded)
             {
-
                 ActiveShield();
             }
-            else
+           else
             {
-                if (_player != null)
-                {
-                    _player.AddScore(10);
-                }
                 Explosion();
             }
         }
@@ -354,7 +333,11 @@ public class Enemy : MonoBehaviour
             {
                 ActiveShield();
             }
-            else if (didCollide == false)
+            else
+            {
+                Explosion();
+            }
+            if (didCollide == false)
             {
                 didCollide = true;
                 Explosion();
@@ -369,12 +352,12 @@ public class Enemy : MonoBehaviour
     // }
 
 
-
+    
     void ActiveShield()
     {
-        if (isShieldActive)
+        if(isShieldActive)
         {
-            shieldHit--;
+            shieldHit -= 1;
 
             lowShield = spriteShield.color;
             lowShield.a -= .35f;
@@ -382,27 +365,31 @@ public class Enemy : MonoBehaviour
 
             if (shieldHit <= 0)
             {
-                isShieldActive = false;
-                _shield.SetActive(false);
-                currentEnemyType = EnemyTypes.Normal;
+                shieldHit = 0;
+               isShieldActive = false;
+               _shield.SetActive(false);
 
-                if (_player != null)
-                {
-                    _player.AddScore(5);
-                }
-
-            }
+               
+               currentEnemyType = EnemyTypes.Normal;
+            }  
         }
-
+        
     }
-
+    
     void Explosion()
     {
+        if(_player != null)
+        {
+            _player.AddScore(10);
+
+        }
         GetComponent<Collider2D>().enabled = false;
         _enemyAnim.SetTrigger("OnEnemyDeath");
         stopMoving = true;
         _speed = 0f;
         _audioExplode.Play();
+        
+
         Destroy(this.gameObject, 2.4f);
     }
 
