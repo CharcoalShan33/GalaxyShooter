@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Mathematics;
 
 
 public class UIManager : MonoBehaviour
@@ -35,12 +36,19 @@ public class UIManager : MonoBehaviour
     float maxCoolDown = 5f;
 
     [Header("Thruster")]
-    float _charge;
+
+
     [SerializeField]
     Slider _chargeBar;
 
     [SerializeField]
-    bool isCharging;
+    Image thrustFill;
+
+    [SerializeField]
+    private Gradient thrustGrade;
+
+    [SerializeField]
+    TMP_Text _thrustText;
 
     [Header("Reload")]
     // current ammo text
@@ -56,16 +64,26 @@ public class UIManager : MonoBehaviour
     TMP_Text shieldText;
 
     [SerializeField]
-    private Gradient grade;
+    private Gradient shieldGrade;
 
     [SerializeField]
-    Image fill;
+    Image shieldFill;
     private Player play;
 
     [Header("Magnet")]
 
     [SerializeField]
-    GameObject visualizer;
+    Slider visualizer;
+
+    [SerializeField]
+    Image magnetFill;
+
+    [SerializeField]
+    private Gradient magnetGrade;
+
+    [SerializeField]
+    TMP_Text _magnetText;
+
 
     // Start is called before the first frame update
     void Start()
@@ -88,7 +106,7 @@ public class UIManager : MonoBehaviour
         maxCoolDown = _cFiller.maxValue;
         _cFiller.value = maxCoolDown;
         //UpdateAmmo();
-        _charge = _chargeBar.maxValue;
+
     }
 
     // Update is called once per frame
@@ -116,47 +134,16 @@ public class UIManager : MonoBehaviour
         return maxCoolDown - coolDownSeconds;
     }
 
-    // starts the charging process.
-
-    public void Charge()
-    {
-        if (isCharging == false)
-        {
-            isCharging = true;
-            StartCoroutine(ChargeThrust());
-        }
-    }
-    // makes the charge equal to zero
-    public void CancelCharge()
-    {
-        if (isCharging == true)
-        {
-            _charge = _chargeBar.value;
-            isCharging = false;
-        }
-    }
-    // makes the charge value go up or down.
-
-    IEnumerator ChargeThrust()
-    {
-        while (isCharging == true)
-        {
-            _chargeBar.value += Time.deltaTime * _charge;
-            yield return null;
-        }
-
-        while (isCharging == false)
-        {
-            _chargeBar.value -= Time.deltaTime * _charge;
-
-            yield return null;
-
-        }
-    }
     public void UpdateShields(int currentShield)
     {
 
         shieldText.text = currentShield.ToString();
+    }
+
+    public void UpdateMagnetCharge(float magnet)
+    {
+
+        _magnetText.text = Mathf.RoundToInt(magnet) + "%";
     }
 
 
@@ -246,14 +233,14 @@ public class UIManager : MonoBehaviour
     {
         shieldSlider.maxValue = shieldNum;
         shieldSlider.value = shieldNum;
-        fill.color = grade.Evaluate(shieldNum);
+        shieldFill.color = shieldGrade.Evaluate(shieldNum);
         shieldSlider.gameObject.SetActive(true);
     }
 
     public void SetShield(int shieldNum)
     {
         shieldSlider.value = shieldNum;
-        fill.color = grade.Evaluate(shieldSlider.normalizedValue);
+        shieldFill.color = shieldGrade.Evaluate(shieldSlider.normalizedValue);
 
         if (shieldNum <= 0)
         {
@@ -277,26 +264,17 @@ public class UIManager : MonoBehaviour
         _chargeBar.gameObject.SetActive(true);
     }
 
-    public void ChargeValue(float min, float max, float speed)
-    {
-        _chargeBar.minValue = min;
-
-        _chargeBar.maxValue = max;
-
-        _chargeBar.value = speed;
-    }
-
 
     public void UseMagnet()
     {
-        visualizer.SetActive(true);
+        visualizer.gameObject.SetActive(true);
         play.isMagnetActive = true;
 
     }
 
     public void DeactivateMagnet()
     {
-        visualizer.SetActive(false);
+        visualizer.gameObject.SetActive(false);
         play.isMagnetActive = false;
     }
 }

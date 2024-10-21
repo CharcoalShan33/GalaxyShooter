@@ -18,8 +18,8 @@ GameObject:
   m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 0
 --- !u!4 &398875352
 Transform:
   m_ObjectHideFlags: 0
@@ -104,7 +104,6 @@ MonoBehaviour:
   growthSpeedA: 0.2
   duration: 3
   coolDown: 3
-  cycleComplete: 0
 --- !u!50 &5253552365528023287
 Rigidbody2D:
   serializedVersion: 4
@@ -133,7 +132,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398875348}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -602,11 +601,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3.88
-  currentMovement: 0
+  currentMovement: 1
   frequency: 0.93
   amplitude: 1
   value: 0.42
-  currentEnemyType: 1
+  currentEnemyType: 0
   shieldHit: 1
   _shield: {fileID: 1482110175460804747}
   ableToShoot: 0

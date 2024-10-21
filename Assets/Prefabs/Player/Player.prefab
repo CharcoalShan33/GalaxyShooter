@@ -373,9 +373,13 @@ MonoBehaviour:
   _shieldsAmount: 0
   maxShieldAmount: 3
   shieldVisual: {fileID: 8522613224239225678}
+  fuelAmount: 0
+  fuelGainSpeed: 2
+  fuelDecreaseSpeed: 2
   _thrusters: {fileID: 3783863275347217141}
   chargeCount: 0
-  _shiftSpeed: 3
+  incrementSpeed: 1
+  count: 5
 --- !u!1 &1106152260771900905
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,13 +600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe1f0f56598c4d509eb3da851c868b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  rotationSpeed: 200
-  detectionRadius: 5
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  damage: 50
 --- !u!1 &6401680217382772920
 GameObject:
   m_ObjectHideFlags: 0

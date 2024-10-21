@@ -200,7 +200,14 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-
+        if(stopMoving)
+        {
+            Freeze();
+        }
+        else
+        {
+            NormalSpeed();
+        }
 
 
     }
@@ -394,17 +401,27 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void Freeze()
+     void Freeze()
     {
         stopMoving = true;
         _speed = 0f;
 
     }
 
-    public void NormalSpeed()
+    void NormalSpeed()
     {
         stopMoving = false;
         _speed = defaultSpeed;
+    }
+
+    public void StartFreeze()
+    {
+        stopMoving = true;
+    }
+
+    public void StopFreeze()
+    {
+        stopMoving = false;
     }
 
 }

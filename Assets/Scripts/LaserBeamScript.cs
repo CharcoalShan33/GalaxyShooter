@@ -33,8 +33,7 @@ public class LaserBeamScript : MonoBehaviour
     [SerializeField]
     float coolDown;
 
-    [SerializeField]
-    int cycleComplete;
+   
     // Start is called before the first frame update
 
     Player play;
@@ -50,10 +49,7 @@ public class LaserBeamScript : MonoBehaviour
 
         col.a = currentA;
         //StartCoroutine(RayCoroutine());
-
         StartCoroutine(GoRay());
-
-
     }
 
     // Update is called once per frame
@@ -74,7 +70,6 @@ public class LaserBeamScript : MonoBehaviour
 
         //GrowOutline();
 
-
         if(play == null)
         {
             Destroy(gameObject);
@@ -86,9 +81,6 @@ public class LaserBeamScript : MonoBehaviour
 
         }
 
-
-
-
     }
     IEnumerator RayCoroutine() /// complete one
     {
@@ -97,34 +89,23 @@ public class LaserBeamScript : MonoBehaviour
 
         StartCoroutine(GoRay());
 
-
-
-
     }
-
-
-
     IEnumerator GoRay()
     {
 
         
         Debug.Log("GoRay Started");
         while (!done)
-        {
-            
+        {         
             GrowRay();
             yield return null;
         }
-        Color newColor = Color.Lerp(Color.green, Color.red, .25f);
           
         this.gameObject.GetComponent<Collider2D>().enabled = true;
-       
-      spr.color = newColor;
-        // spr.color = Color.red;
+         spr.color = Color.red;
         yield return new WaitForSeconds(duration);
-        // spr.color = Color.green;
-        Color oldColor = Color.Lerp(Color.red, Color.green, .25f);
-        spr.color = oldColor;
+         spr.color = Color.green;
+      
         this.gameObject.GetComponent<Collider2D>().enabled = false;
         while (done)
         {
@@ -133,15 +114,13 @@ public class LaserBeamScript : MonoBehaviour
             yield return null;
         }
        
-
         StartCoroutine(RayCoroutine());
     }
 
-
-    private void GrowOutline()
-    {
-        transform.localScale = Vector2.MoveTowards(transform.localScale, new Vector2(increase, 75f), growthSpeedT * Time.deltaTime);
-    }
+   // private void GrowOutline()
+    //{
+       // transform.localScale = Vector2.MoveTowards(transform.localScale, new Vector2(increase, 75f), growthSpeedT * Time.deltaTime);
+   // }
 
     void GrowRay()
     {
@@ -162,11 +141,6 @@ public class LaserBeamScript : MonoBehaviour
         }
 
     }
-
-
-
- 
-
     void StopRay()
     {
         //done = true;
@@ -185,7 +159,7 @@ public class LaserBeamScript : MonoBehaviour
                 done = false;
 
                 currentA = 0;
-                duration = 2f;
+                duration = 3f;
 
 
             }

@@ -33,10 +33,7 @@ public class PowerUp : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _speed * Time.deltaTime);
 
-            if(powerUpId == 6 )
-            {
-                //transform.position = 
-            }
+            
         }
         else if(_player.isMagnetActive == false)
         { transform.Translate(Vector2.down * _speed * Time.deltaTime);
