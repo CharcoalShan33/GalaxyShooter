@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private bool isGameOver;
+
+    [SerializeField] int enemiesRemaining;
+    [SerializeField] int waveCount;
+
+    [SerializeField] int currentWave = 1;
     // Start is called before the first frame update void Start()
 
     // this number is multiplied. Adds Difficulty
-    public int difficulty;
 
     public void GameOver()
     {

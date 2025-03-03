@@ -41,31 +41,25 @@ public class Player : MonoBehaviour
     [Header("Weapons")]
     [SerializeField]
     GameObject shootPoint;
-
-    bool isLaser, isBomb, isMissile;
+    [SerializeField]
+    private GameObject _tripleShot;
 
     [SerializeField]
-    private List<GameObject> weapons = new();
+    private GameObject _cannon; // still using it.
 
     [SerializeField]
-    private GameObject currentWeapon;
-
-    private int weaponIndex = 0;
+    GameObject bomb;
 
     [SerializeField]
-    private GameObject _trippleShot;
+    GameObject[] _missile; // homing missles
+    
+    [SerializeField] Transform[] misslePlacements;
 
     [SerializeField]
-    private GameObject _cannon;
+    GameObject _laser;
 
-    [SerializeField]
-    GameObject[] homingMissles;
-
-    [SerializeField]
-    GameObject bombs;
-
-    [SerializeField]
-    GameObject _missile;
+    public List<GameObject> weapons;
+    //private gameob
 
 
     [Header("Active Functions")]
@@ -77,8 +71,6 @@ public class Player : MonoBehaviour
     private bool isShieldBoostActive;
 
     private bool isNewFireActive;
-
-    private bool isRareWeaponActive;
 
     [SerializeField] GameObject explodeObject;
 
@@ -162,6 +154,13 @@ public class Player : MonoBehaviour
 
     Vector3 defaultThrust = new(.17f, .17f, 0.0f);
 
+    public float spawnTime = 2f;
+    public Vector3 currentPosition;
+
+    [SerializeField] float invincibleTime;
+
+    public bool rareWeaponActive;
+
 
     // float smallAmount = 0.01f;
 
@@ -171,6 +170,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+
+       
+        _laser.SetActive(true);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
@@ -202,9 +204,7 @@ public class Player : MonoBehaviour
             Debug.LogError("The renderer is not found! Add a SpriteRenderer source component.");
         }
 
-        weapons.Add(_missile);
-        weapons.Add(bombs);
-        currentWeapon = weapons[weaponIndex];
+
 
 
         _thrusters.gameObject.transform.localScale = defaultThrust;
@@ -220,11 +220,15 @@ public class Player : MonoBehaviour
         _pSpeed = Mathf.Ceil(_pSpeed);
 
 
+        weapons.Add(_laser);
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         CalculateMovement();
         //SpeedUp();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _timePassed)
@@ -232,13 +236,11 @@ public class Player : MonoBehaviour
             FireLaser();
         }
 
+
         if (currentAmmo <= 0)
         {
             currentAmmo = 0;
         }
-
-
-
         if (Input.GetKey(KeyCode.C))
         {
             AttractMagnet();
@@ -254,9 +256,19 @@ public class Player : MonoBehaviour
             RefillAmmo();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            CycleWeapon();
+            FireMissiles();
+        }
+
+          if (Input.GetKeyDown(KeyCode.B))
+        {
+            FireBomb();
+        }
+
+         if (Input.GetKeyDown(KeyCode.J))
+        {
+           CycleWeapons();
         }
 
 
@@ -266,6 +278,8 @@ public class Player : MonoBehaviour
             currentReserve = 0;
 
         }
+
+
 
         if (_pSpeed <= 7f)
         {
@@ -284,34 +298,27 @@ public class Player : MonoBehaviour
 
     }
 
-    void CycleWeapon()
+    private void CycleWeapons()
     {
-        weaponIndex++;
-        if (weaponIndex >= weapons.Count)
-        {
-            weaponIndex = 0;
-        }
-        Debug.Log("Weapon " + weaponIndex);
-        currentWeapon = weapons[weaponIndex];
+       
+    }
 
-        if (weapons[0])
+    private void FireBomb()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void FireMissiles()
+    {
+        for(int i = 0; i < _missile.Length; i++)
         {
-            isLaser = true;
-            isBomb = false;
-            isMissile = false;
+            transform.Rotate(_missile[i].transform.position * 90);
+            Instantiate(_missile[i], misslePlacements[i].position, Quaternion.identity);
+            continue;
+
         }
-        if (weapons[1])
-        {
-            isMissile = true;
-            isLaser = false;
-            isBomb = false;
-        }
-        if (weapons[2])
-        {
-            isLaser = false;
-            isBomb = true;
-            isMissile = false;
-        }
+        return;
+       
     }
 
     public void AttractMagnet()
@@ -345,30 +352,20 @@ public class Player : MonoBehaviour
         {
             PlaySFXClip(_laserShot[0]);
 
-            if (isLaser == true)
-            {
-                Instantiate(_missile, shootPoint.transform.position, Quaternion.identity);
-                currentWeapon = _missile;
 
-                if (_isTripleShotActive == true)
-                {
-                    currentWeapon = _trippleShot;
-                    Instantiate(_trippleShot, shootPoint.transform.position, Quaternion.identity);
-                }
-            }
+            Instantiate(_laser, shootPoint.transform.position, Quaternion.identity);
 
-            if (isBomb == true)
+            if (_isTripleShotActive == true)
             {
-                isRareWeaponActive = true;
-                if (isNewFireActive == true)
-                {
-                    Instantiate(_cannon, shootPoint.transform.position, Quaternion.identity);
-                }
+
+                Instantiate(_tripleShot, shootPoint.transform.position, Quaternion.identity);
             }
 
 
+            //
 
         }
+
         else if (currentAmmo <= 0 && isFiring)
         {
             Debug.Log("No Ammo");
@@ -380,6 +377,9 @@ public class Player : MonoBehaviour
         }
 
     }
+
+
+
 
     void Shake()
     {
@@ -428,19 +428,10 @@ public class Player : MonoBehaviour
         }
         Shake();
 
-
+        // respawn
         lives--;
 
-        if (lives == 2)
-        {
-
-            _rightHitShip.SetActive(true);
-        }
-        if (lives == 1)
-        {
-
-            _leftHitShip.SetActive(true);
-        }
+        StartCoroutine(Respawn());
 
         _uiManager.UpdateLives(lives);
 
@@ -452,16 +443,65 @@ public class Player : MonoBehaviour
 
             gameObject.SetActive(false);
             Destroy(this.gameObject, 2.3f);
-            Debug.Log("I am Destroyed");
             _spawnManager.OnPlayerDeath();
         }
+
+    }
+
+    private IEnumerator Respawn()
+    {
+
+        Collider2D collide = gameObject.GetComponent<Collider2D>();
+        collide.enabled = false;
+        isFiring = false;
+        spriteRend.enabled = false;
+        _thrusters.SetActive(false);
+        if (lives == 2)
+        {
+
+
+            _rightHitShip.SetActive(false);
+        }
+        if (lives == 1)
+        {
+
+            _rightHitShip.SetActive(false);
+            _leftHitShip.SetActive(false);
+        }
+        gameObject.layer = 7;
+
+        yield return new WaitForSeconds(spawnTime);
+
+        transform.position = currentPosition;
+
+        for (float i = 0; i < invincibleTime; i += 0.1f)
+        {
+
+            spriteRend.enabled = !spriteRend.enabled;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (lives == 2)
+        {
+            _rightHitShip.SetActive(true);
+        }
+        if (lives == 1)
+        {
+            _rightHitShip.SetActive(true);
+            _leftHitShip.SetActive(true);
+        }
+        collide.enabled = true;
+        spriteRend.enabled = true;
+        isFiring = true;
+        _thrusters.SetActive(true);
+        gameObject.layer = 6;
 
     }
 
     public void NewFireActive()
     {
 
-        _missile.SetActive(false);
+        _laser.SetActive(false);
         _cannon.SetActive(true);
         isNewFireActive = true;
         StartCoroutine(NewFire());
@@ -469,9 +509,9 @@ public class Player : MonoBehaviour
 
     public void TripleShotActive()
     {
-        _trippleShot.SetActive(true);
+        _tripleShot.SetActive(true);
         //_cannon.SetActive(false);
-        _missile.SetActive(false);
+        _laser.SetActive(false);
         _isTripleShotActive = true;
         StartCoroutine(TripleShotCountDown());
     }
@@ -495,19 +535,49 @@ public class Player : MonoBehaviour
         shieldVisual.SetActive(true);
     }
 
+    public void BombFire()
+    {
+        rareWeaponActive = true;
+        _laser.SetActive(false);
+        bomb.SetActive(true);
+
+        currentAmmo = 10;
+        maxAmmo = 10;
+        currentReserve = 30;
+        maxReserve = 30;
+       
+    }
+
+    IEnumerator RareActive()
+    {
+
+        yield return new WaitForSeconds(2.5f);
+        isFiring = false;
+        rareWeaponActive = false;
+
+        _laser.SetActive(true);
+        bomb.SetActive(false);
+        currentAmmo = 15;
+        maxAmmo = 15;
+        currentReserve = 50;
+        maxReserve = 50;
+
+
+
+    }
     IEnumerator TripleShotCountDown()
     {
         yield return new WaitForSeconds(5f);
         _isTripleShotActive = false;
-        _trippleShot.SetActive(false);
-        _missile.SetActive(true);
+        _tripleShot.SetActive(false);
+        _laser.SetActive(true);
     }
     IEnumerator NewFire()
     {
         yield return new WaitForSeconds(5f);
         isNewFireActive = false;
         _cannon.SetActive(false);
-        _missile.SetActive(true);
+        _laser.SetActive(true);
     }
 
     IEnumerator SpeedCountDown()
@@ -584,6 +654,16 @@ public class Player : MonoBehaviour
         }
 
 
+
+    }
+
+    public void AddBombs(int amount) /// amount of bombs
+    {
+
+    }
+
+    public void AddMissiles(int amount) // amount of missiles
+    {
 
     }
     public void Negated()

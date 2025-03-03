@@ -383,7 +383,7 @@ public class Enemy : MonoBehaviour
         
     }
     
-    void Explosion()
+   public void Explosion()
     {
         if(_player != null)
         {

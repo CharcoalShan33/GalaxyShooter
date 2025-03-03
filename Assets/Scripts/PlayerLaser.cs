@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerLaser : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerLaser : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         rig = GetComponent<Rigidbody2D>();
 
         if (rig == null)
@@ -27,6 +29,7 @@ public class PlayerLaser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       // rig.velocity = Vector3.up * _speed * Time.deltaTime;
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
         if (transform.position.y > 9.3f)
@@ -49,6 +52,10 @@ public class PlayerLaser : MonoBehaviour
         if(collision.CompareTag("Enemy"))
         {
             Destroy(this.gameObject);
+        }
+        if(collision.CompareTag("Meteor"))
+        {
+             Destroy(this.gameObject);
         }
     }
 

@@ -33,15 +33,15 @@ public class AsteroidBehavior : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         
-        if(other.tag == "Laser")
+        if(other.tag == "Laser" || other.tag == "Missile" || other.tag == "Bomb")
         {
            
-            Instantiate(explodeObject,transform.position, Quaternion.identity);
+           
             //other.gameObject.SetActive(false);
             
             
             Destroy(other.gameObject);
-          
+           Instantiate(explodeObject,transform.position, Quaternion.identity);
             Destroy(this.gameObject, .35f);
             spawnManager.StartSpawning();
            

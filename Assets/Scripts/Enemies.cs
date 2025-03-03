@@ -37,15 +37,15 @@ public class Enemies : MonoBehaviour
 
     private void Update()
     {
-        distance = Vector2.Distance(transform.position, player.transform.position);
+        distance = Vector3.Distance(transform.position, player.transform.position);
 
 
-        Vector2 direction = (player.transform.position - transform.position).normalized;
+        Vector3 direction = (transform.position - player.transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         if (distance < sightRange)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(Vector3.forward * angle);
         }
     }

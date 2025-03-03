@@ -10,6 +10,8 @@ TagManager:
   - Explosion
   - Collectable
   - EnemyLaser
+  - Missile
+  - Bomb
   layers:
   - Default
   - TransparentFX
@@ -23,9 +25,9 @@ TagManager:
   - EnemyProjectiles
   - Power-Ups
   - Post_Processing
-  - Other
-  - Protection
-  - Explosion
+  - Hazards
+  - Hit_Layer
+  - 
   - 
   - 
   - 

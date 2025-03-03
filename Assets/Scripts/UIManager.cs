@@ -164,9 +164,11 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateAmmo()
     {
+        int difference = play.currentAmmo/ 3;
         _ammoText.text = "Ammo: " + play.currentAmmo + " / " + play.maxAmmo + " | " + " Storage: " + play.currentReserve + " / " + play.maxReserve;
 
-        if (play.currentAmmo <= 5 && play.currentAmmo > 0)
+
+        if (difference <= 5 && play.currentAmmo > 0)
         {
             StartCoroutine(Blink());
         }
@@ -176,7 +178,6 @@ public class UIManager : MonoBehaviour
             _ammoText.color = Color.white;
 
         }
-
     }
     //_ammoText.text = $"{play.currentAmmo} / {play.maxAmmo} | {play.currentReserve} / {play.maxReserve}";
     //_ammoText.text = reload.ToString();

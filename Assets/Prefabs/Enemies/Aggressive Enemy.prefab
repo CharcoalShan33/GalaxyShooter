@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8215857118174099957}
   - component: {fileID: 8215857118174099721}
   - component: {fileID: 8215857118174099720}
-  - component: {fileID: 8215857118174099723}
   m_Layer: 7
   m_Name: Aggressive Enemy
   m_TagString: Enemy
@@ -27,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8215857118174099956}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
   m_LocalPosition: {x: -0.17, y: 2.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -35,7 +34,7 @@ Transform:
   - {fileID: 4452474834543204447}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!60 &8215857118174099957
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -46,7 +45,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -129,21 +128,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8215857118174099723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8215857118174099956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97ad9452f539143c3ba1623c0e38c36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 346749681250337973, guid: dca799af7df384bac9f31298006e1115, type: 3}
-  sightRange: 3
-  speed: 3.43
 --- !u!1 &9010149489268409236
 GameObject:
   m_ObjectHideFlags: 0

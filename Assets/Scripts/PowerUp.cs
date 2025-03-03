@@ -91,12 +91,18 @@ public class PowerUp : MonoBehaviour
                        
                         break;
                     case 7:
+                         // reserves
                         Debug.Log("Homing Missle!");
                         break;
 
                     case 8:
-                        Debug.Log("Magnet Activated");
+                        //player.AddAmmo(10);// 
+                       _player.BombFire();
+                        Debug.Log("Bomb Activated");
                         break;
+                    case 9:
+                    Debug.Log("MagnetPower");
+                    break;
                 }
                 
             }
