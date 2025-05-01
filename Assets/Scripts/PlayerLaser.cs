@@ -15,7 +15,7 @@ public class PlayerLaser : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
         rig = GetComponent<Rigidbody2D>();
 
         if (rig == null)
@@ -23,13 +23,13 @@ public class PlayerLaser : MonoBehaviour
             Debug.LogError("THIS COMPONENT IS NULL! FIND THE COMPONENT");
         }
 
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-       // rig.velocity = Vector3.up * _speed * Time.deltaTime;
+        // rig.velocity = Vector3.up * _speed * Time.deltaTime;
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
         if (transform.position.y > 9.3f)
@@ -41,21 +41,23 @@ public class PlayerLaser : MonoBehaviour
             }
 
             Destroy(gameObject);
-           
+
             //gameObject.SetActive(false);
 
         }
     }
 
-   private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy"))
         {
             Destroy(this.gameObject);
+            Destroy(collision.gameObject);
         }
-        if(collision.CompareTag("Meteor"))
+        if (collision.CompareTag("Hazard"))
         {
-             Destroy(this.gameObject);
+            Destroy(this.gameObject);
+            Destroy(collision.gameObject);
         }
     }
 

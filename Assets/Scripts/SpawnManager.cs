@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
 
     private bool _isPlayerDead = false;
 
- 
+
     float startTimeValue = 3.0f;
 
     //[SerializeField]
@@ -29,8 +29,6 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Obstacles")]
     [SerializeField] GameObject[] meteors;
-    [SerializeField] GameObject[] enemyParts;
-   
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +47,7 @@ public class SpawnManager : MonoBehaviour
             timer -= spawnTime;
         }
         */
-      
+
     }
     /*
     IEnumerator EnemySpawning()
@@ -88,7 +86,7 @@ public class SpawnManager : MonoBehaviour
             Vector2 powerPosition = new Vector2(Random.Range(-8f, 8f), 7);
 
             int randomValue = Random.Range(0, 2);
-      
+
             Instantiate(meteors[randomValue], powerPosition, Quaternion.identity);
 
             yield return new WaitForSeconds(Random.Range(3, 5));
@@ -106,9 +104,9 @@ public class SpawnManager : MonoBehaviour
             Vector2 powerPosition = new Vector2(Random.Range(-8f, 8f), 7);
 
             int randomValue = Random.Range(0, 9);
-      
+
             Instantiate(_powerUp[randomValue], powerPosition, Quaternion.identity);
-            
+
 
             yield return new WaitForSeconds(Random.Range(3, 5));
 
@@ -118,9 +116,9 @@ public class SpawnManager : MonoBehaviour
     void RareSpawn()
     {
 
-      //  Vector2 powerPosition1 = new Vector2(Random.Range(-8f, 8f), 7);
+        //  Vector2 powerPosition1 = new Vector2(Random.Range(-8f, 8f), 7);
         //Instantiate(_powerUp[5], powerPosition1, Quaternion.identity);
-        
+
     }
 
     public void StartSpawning()
@@ -129,7 +127,7 @@ public class SpawnManager : MonoBehaviour
         //StartCoroutine(EnemySpawning());
         StartCoroutine(SpawnPowerUp());
         StartCoroutine(ObstacleSpawning());
-       
+
     }
 
     public void OnPlayerDeath()

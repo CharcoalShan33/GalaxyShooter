@@ -19,8 +19,8 @@ public class PowerUp : MonoBehaviour
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
-        
-        if(rig == null)
+
+        if (rig == null)
         {
             Debug.LogError("This Component is NULL.");
         }
@@ -29,21 +29,22 @@ public class PowerUp : MonoBehaviour
     }
     private void Update()
     {
-        if(_player.isMagnetActive)
+        if (_player.isMagnetActive)
         {
             transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _speed * Time.deltaTime);
 
-            
+
         }
-        else if(_player.isMagnetActive == false)
-        { transform.Translate(Vector2.down * _speed * Time.deltaTime);
+        else if (_player.isMagnetActive == false)
+        {
+            transform.Translate(Vector2.down * _speed * Time.deltaTime);
             if (transform.position.y < -9.3f)
             {
                 Destroy(this.gameObject);
             }
         }
     }
-  
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         AudioSource.PlayClipAtPoint(_pClip, transform.position);
@@ -88,27 +89,27 @@ public class PowerUp : MonoBehaviour
 
                     case 6:
                         player.Negated();
-                       
+
                         break;
                     case 7:
-                         // reserves
+                        // reserves
                         Debug.Log("Homing Missle!");
                         break;
 
                     case 8:
                         //player.AddAmmo(10);// 
-                       _player.BombFire();
+                        _player.BombFire();
                         Debug.Log("Bomb Activated");
                         break;
                     case 9:
-                    Debug.Log("MagnetPower");
-                    break;
+                        Debug.Log("MagnetPower");
+                        break;
                 }
-                
+
             }
-                
+
         }
-       Destroy(gameObject);
-        
+        Destroy(gameObject);
+
     }
 }

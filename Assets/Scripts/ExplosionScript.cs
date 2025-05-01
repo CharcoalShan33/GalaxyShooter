@@ -9,9 +9,9 @@ public class ExplosionScript : MonoBehaviour
     void Start()
     {
         Destroy(this.gameObject, 2.4f);
-      
+
     }
 
 
-    
+
 }

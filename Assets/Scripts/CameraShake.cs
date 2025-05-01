@@ -24,7 +24,7 @@ public class CameraShake : MonoBehaviour
     [SerializeField]
     int shakeID;
 
-   
+
 
     private void Start()
     {
@@ -36,8 +36,8 @@ public class CameraShake : MonoBehaviour
         shakeRot = Vector3.one;
         duration = magnitude = frequency = 0;
 
- 
-       
+
+
 
     }
 
@@ -49,7 +49,7 @@ public class CameraShake : MonoBehaviour
 
         frequency = Mathf.Clamp(frequency, 0, 35);
 
-      if(duration <=0)
+        if (duration <= 0)
         {
             duration = 0;
         }
@@ -111,13 +111,13 @@ public class CameraShake : MonoBehaviour
 
     void Shake1()// Horizontal Shake
     {
-        transform.localPosition = new Vector3(shakePos.x * Mathf.PerlinNoise(0.0f, Time.time * frequency), 0, 0) * magnitude ;
+        transform.localPosition = new Vector3(shakePos.x * Mathf.PerlinNoise(0.0f, Time.time * frequency), 0, 0) * magnitude;
         //Transform Local positions for X and Y Axis only.
     }
 
     void ImpactHit() // Rotational Shake
     {
-        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, shakeRot.z * Mathf.PerlinNoise(0f, Time.time * frequency))* magnitude) ;
+        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, shakeRot.z * Mathf.PerlinNoise(0f, Time.time * frequency)) * magnitude);
         // Rotation is for Z axis only.
     }
 

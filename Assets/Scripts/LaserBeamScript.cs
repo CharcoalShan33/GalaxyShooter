@@ -33,7 +33,7 @@ public class LaserBeamScript : MonoBehaviour
     [SerializeField]
     float coolDown;
 
-   
+
     // Start is called before the first frame update
 
     Player play;
@@ -70,7 +70,7 @@ public class LaserBeamScript : MonoBehaviour
 
         //GrowOutline();
 
-        if(play == null)
+        if (play == null)
         {
             Destroy(gameObject);
         }
@@ -84,7 +84,7 @@ public class LaserBeamScript : MonoBehaviour
     }
     IEnumerator RayCoroutine() /// complete one
     {
-       
+
         yield return new WaitForSeconds(coolDown);
 
         StartCoroutine(GoRay());
@@ -93,19 +93,19 @@ public class LaserBeamScript : MonoBehaviour
     IEnumerator GoRay()
     {
 
-        
+
         Debug.Log("GoRay Started");
         while (!done)
-        {         
+        {
             GrowRay();
             yield return null;
         }
-          
+
         this.gameObject.GetComponent<Collider2D>().enabled = true;
-         spr.color = Color.red;
+        spr.color = Color.red;
         yield return new WaitForSeconds(duration);
-         spr.color = Color.green;
-      
+        spr.color = Color.green;
+
         this.gameObject.GetComponent<Collider2D>().enabled = false;
         while (done)
         {
@@ -113,24 +113,24 @@ public class LaserBeamScript : MonoBehaviour
             StopRay();
             yield return null;
         }
-       
+
         StartCoroutine(RayCoroutine());
     }
 
-   // private void GrowOutline()
+    // private void GrowOutline()
     //{
-       // transform.localScale = Vector2.MoveTowards(transform.localScale, new Vector2(increase, 75f), growthSpeedT * Time.deltaTime);
-   // }
+    // transform.localScale = Vector2.MoveTowards(transform.localScale, new Vector2(increase, 75f), growthSpeedT * Time.deltaTime);
+    // }
 
     void GrowRay()
     {
-        
+
         desiredA = 1;
         //done = false;
 
         currentA = Mathf.MoveTowards(currentA, desiredA, growthSpeedA * Time.deltaTime);
         col = new(0f, 1f, 0f, currentA);
-        
+
         spr.color = col;
 
         if (currentA == 1)
@@ -149,7 +149,7 @@ public class LaserBeamScript : MonoBehaviour
         desiredA = 0f;
         if (duration <= 0)
         {
-            
+
             currentA = Mathf.MoveTowards(currentA, desiredA, growthSpeedA * Time.deltaTime);
             col = new(0f, 1f, 0f, currentA);
             spr.color = col;
@@ -181,6 +181,6 @@ public class LaserBeamScript : MonoBehaviour
         }
     }
 
-    
+
 
 }

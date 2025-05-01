@@ -35,12 +35,16 @@ public class Player : MonoBehaviour
     // default speed
     [SerializeField]
     float _pSpeed = 7.0f;
+    [SerializeField]
+    GameObject shootPoint;
+
+    [SerializeField]
+    GameObject grenadePoint;
 
     SpriteRenderer spriteRend;
 
     [Header("Weapons")]
-    [SerializeField]
-    GameObject shootPoint;
+    
     [SerializeField]
     private GameObject _tripleShot;
 
@@ -48,19 +52,12 @@ public class Player : MonoBehaviour
     private GameObject _cannon; // still using it.
 
     [SerializeField]
-    GameObject bomb;
+    GameObject _grenade;
 
     [SerializeField]
-    GameObject[] _missile; // homing missles
-    
-    [SerializeField] Transform[] misslePlacements;
+    GameObject _laser; // default laser
 
-    [SerializeField]
-    GameObject _laser;
-
-    public List<GameObject> weapons;
-    //private gameob
-
+    // Missile Here
 
     [Header("Active Functions")]
 
@@ -70,9 +67,12 @@ public class Player : MonoBehaviour
 
     private bool isShieldBoostActive;
 
-    private bool isNewFireActive;
+    private bool isNewFireActive; // new weapon
 
     [SerializeField] GameObject explodeObject;
+
+
+    public bool rareWeaponActive;
 
 
     [Header("UI Elements")]
@@ -140,51 +140,51 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject _thrusters;
 
-
     private float minSpeed = 7f; // default speed
     private float maxSpeed = 12f; // maximum speed.
 
-
     // for the speed powerup
     private float speedMulitiplier = 1.5f;
-
 
     // Vector3 minGrowth = new(.2f, .2f, 0.0f);
     Vector3 maxGrowth = new(.3f, .3f, 0.0f);
 
     Vector3 defaultThrust = new(.17f, .17f, 0.0f);
 
+    [Header("SpawnTime")]
     public float spawnTime = 2f;
     public Vector3 currentPosition;
 
     [SerializeField] float invincibleTime;
 
-    public bool rareWeaponActive;
-
-
-    // float smallAmount = 0.01f;
-
-    //[serializeField] private GameObject effect;
-
-    // Start is called before the first frame update
+   //[Header("Other")]
+    GameManager _gm;
 
     void Start()
     {
+        this.gameObject.tag = "Player";
+        currentPosition = transform.position;
 
-       
         _laser.SetActive(true);
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _shieldRend = transform.Find("Shield").GetComponentInChildren<SpriteRenderer>();
+        _gm = GameObject.Find("game_manager").GetComponent<GameManager>();
 
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if (_uiManager == null)
         {
             Debug.LogError("UI Manager is Null! Add a UI component.");
         }
         if (_spawnManager == null)
         {
-            Debug.LogError("Spawn Manager is NULL! Add a spawn manager component.");
+            Debug.LogError("SpawnManager is NULL! Add a spawn manager component.");
+        }
+
+        if (_gm == null)
+        {
+            Debug.LogError("Game Manager is NULL! Add a game manager component.");
         }
 
         if (_audioSource == null)
@@ -203,40 +203,24 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("The renderer is not found! Add a SpriteRenderer source component.");
         }
-
-
-
-
         _thrusters.gameObject.transform.localScale = defaultThrust;
-
         _leftHitShip.SetActive(false);
         _rightHitShip.SetActive(false);
-        // effect.SetActive(false);
         _pSpeed = minSpeed;
 
         currentAmmo = maxAmmo;
-
-
         _pSpeed = Mathf.Ceil(_pSpeed);
-
-
-        weapons.Add(_laser);
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
         CalculateMovement();
         //SpeedUp();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _timePassed)
         {
             FireLaser();
         }
-
-
         if (currentAmmo <= 0)
         {
             currentAmmo = 0;
@@ -252,34 +236,25 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.N) && currentAmmo <= 0 && currentReserve > 0)
         {
-
             RefillAmmo();
         }
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            FireMissiles();
+           // Missiles
+
         }
 
-          if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.J))
         {
-            FireBomb();
+
+
+        // Grenade
         }
-
-         if (Input.GetKeyDown(KeyCode.J))
-        {
-           CycleWeapons();
-        }
-
-
         if (currentReserve <= 0)
         {
-
             currentReserve = 0;
-
         }
-
-
 
         if (_pSpeed <= 7f)
         {
@@ -298,29 +273,6 @@ public class Player : MonoBehaviour
 
     }
 
-    private void CycleWeapons()
-    {
-       
-    }
-
-    private void FireBomb()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void FireMissiles()
-    {
-        for(int i = 0; i < _missile.Length; i++)
-        {
-            transform.Rotate(_missile[i].transform.position * 90);
-            Instantiate(_missile[i], misslePlacements[i].position, Quaternion.identity);
-            continue;
-
-        }
-        return;
-       
-    }
-
     public void AttractMagnet()
     {
         isMagnetActive = true;
@@ -337,7 +289,6 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-
         isFiring = true;
 
         int ammoClamp = Mathf.Clamp(currentAmmo, 0, maxAmmo);
@@ -360,20 +311,15 @@ public class Player : MonoBehaviour
 
                 Instantiate(_tripleShot, shootPoint.transform.position, Quaternion.identity);
             }
-
-
             //
 
         }
-
         else if (currentAmmo <= 0 && isFiring)
         {
             Debug.Log("No Ammo");
             isFiring = false;
 
             PlaySFXClip(_laserShot[1]);
-
-
         }
 
     }
@@ -438,7 +384,9 @@ public class Player : MonoBehaviour
         if (lives <= 0)
         {
             lives = 0;
-
+            
+           // StopAllCoroutines();
+            //StopCoroutine(Respawn());
             Instantiate(explodeObject, transform.position, Quaternion.identity);
 
             gameObject.SetActive(false);
@@ -472,7 +420,7 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(spawnTime);
 
-        transform.position = currentPosition;
+        currentPosition = transform.position;
 
         for (float i = 0; i < invincibleTime; i += 0.1f)
         {
@@ -537,34 +485,17 @@ public class Player : MonoBehaviour
 
     public void BombFire()
     {
-        rareWeaponActive = true;
+        //rareWeaponActive = true;
         _laser.SetActive(false);
-        bomb.SetActive(true);
+        _grenade.SetActive(true);
 
         currentAmmo = 10;
         maxAmmo = 10;
         currentReserve = 30;
         maxReserve = 30;
-       
-    }
-
-    IEnumerator RareActive()
-    {
-
-        yield return new WaitForSeconds(2.5f);
-        isFiring = false;
-        rareWeaponActive = false;
-
-        _laser.SetActive(true);
-        bomb.SetActive(false);
-        currentAmmo = 15;
-        maxAmmo = 15;
-        currentReserve = 50;
-        maxReserve = 50;
-
-
 
     }
+
     IEnumerator TripleShotCountDown()
     {
         yield return new WaitForSeconds(5f);
@@ -719,5 +650,40 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _pSpeed = minSpeed;
+    }
+
+    public void Reset()
+    {
+        lives = 3;
+        invincibleTime = 3f;
+        spawnTime = 3f;
+        currentAmmo = maxAmmo;
+        currentReserve = maxReserve;
+    }
+
+    public void InstantDeath()
+    {
+
+        if (lives > 0)
+        {
+            _uiManager.UpdateLives(0);
+            if (isShieldBoostActive == true)
+            {
+                isShieldBoostActive = false;
+            }
+            lives = 0;
+
+            Instantiate(explodeObject, transform.position, Quaternion.identity);
+
+            gameObject.SetActive(false);
+            Destroy(this.gameObject, 2.3f);
+            _gm.GameOver();
+            _spawnManager.OnPlayerDeath();
+         
+            //StopAllCoroutines();
+        }
+
+
+
     }
 }

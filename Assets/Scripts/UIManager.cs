@@ -84,6 +84,16 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     TMP_Text _magnetText;
 
+    TMP_Text _explosiveText;
+
+    [SerializeField] Image activeImage;
+
+
+    [Header("Launch")]
+
+    [SerializeField] TMP_Text _waveCountDownText;
+
+    [SerializeField] int count;
 
     // Start is called before the first frame update
     void Start()
@@ -113,6 +123,7 @@ public class UIManager : MonoBehaviour
     void Update()
     {
 
+        
         UpdateAmmo();
 
         _timeText.text = coolDownSeconds.ToString("0.0");
@@ -164,11 +175,11 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateAmmo()
     {
-        int difference = play.currentAmmo/ 3;
+    
+     
         _ammoText.text = "Ammo: " + play.currentAmmo + " / " + play.maxAmmo + " | " + " Storage: " + play.currentReserve + " / " + play.maxReserve;
 
-
-        if (difference <= 5 && play.currentAmmo > 0)
+        if (play.currentAmmo <= 5 && play.currentAmmo > 0)
         {
             StartCoroutine(Blink());
         }
@@ -183,8 +194,6 @@ public class UIManager : MonoBehaviour
     //_ammoText.text = reload.ToString();
     //_currentValue = reload;
     //_ammoText.text = "Ammo: " + _currentValue + "/" + _maxValue;
-
-
 
     IEnumerator Blink()
     {
@@ -224,9 +233,9 @@ public class UIManager : MonoBehaviour
         while (true)
         {
             _gameOverText.text = "GAME OVER";
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1.5f);
             _gameOverText.text = "";
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1.5f);
         }
     }
 

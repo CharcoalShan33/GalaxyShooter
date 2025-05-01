@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    
+
     private AudioSource _audioSource;
-   
+
     private void Awake()
     {
         _audioSource = GetComponentInChildren<AudioSource>();
@@ -15,8 +15,8 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-       
-        if(_audioSource == null)
+
+        if (_audioSource == null)
         {
             Debug.LogError("Get the Component");
         }

@@ -6,53 +6,32 @@ public class AsteroidBehavior : MonoBehaviour
 {
     [SerializeField]
     private float _rotateSpeed = 3f;
-
-  
-
     [SerializeField]
     private GameObject explodeObject;
-
     private SpawnManager spawnManager;
-
-  
-
     // Start is called before the first frame update
     void Start()
     {
         spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-
-      
     }
-
     // Update is called once per frame
     void Update()
     {
         transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
     }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
-        if(other.tag == "Laser" || other.tag == "Missile" || other.tag == "Bomb")
+        if (other.CompareTag("Laser") || other.CompareTag("Explosive"))
         {
-           
-           
             //other.gameObject.SetActive(false);
-            
-            
-            Destroy(other.gameObject);
-           Instantiate(explodeObject,transform.position, Quaternion.identity);
-            Destroy(this.gameObject, .35f);
-            spawnManager.StartSpawning();
-           
-            
-
-           
-          
-            
+             Destroy(other.gameObject);
+            ExplodeObject();
         }
     }
-
-    
-    
+    void ExplodeObject()
+    {
+        Instantiate(explodeObject, transform.position, Quaternion.identity);
+        Destroy(this.gameObject, .35f);
+        spawnManager.StartSpawning();
+    }
 }

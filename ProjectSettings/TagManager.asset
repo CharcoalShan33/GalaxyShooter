@@ -4,14 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Meteor
   - Laser
   - Enemy
-  - Explosion
   - Collectable
   - EnemyLaser
-  - Missile
-  - Bomb
+  - Hazard
+  - Explosive
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -26,7 +25,7 @@ TagManager:
   - Power-Ups
   - Post_Processing
   - Hazards
-  - Hit_Layer
+  - All Objects
   - 
   - 
   - 

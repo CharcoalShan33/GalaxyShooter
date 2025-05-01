@@ -10,14 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4510281529333917920}
   - component: {fileID: 4510281529333917921}
-  - component: {fileID: 4510281529333917950}
   - component: {fileID: 4510281529333917923}
-  - component: {fileID: 4510281529333917924}
-  - component: {fileID: 4510281529333917925}
   - component: {fileID: 4510281529333917922}
+  - component: {fileID: 45393837231146534}
+  - component: {fileID: 6949158836521274037}
   m_Layer: 12
   m_Name: Meteor2
-  m_TagString: Meteor
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4510281529333917951}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.6750001, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4510281529333917921
 SpriteRenderer:
@@ -89,19 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4510281529333917950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4510281529333917951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f47df0dc2e0864e2a8b1261e77439df5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explodeParticlePrefab: {fileID: 8344124576167811601, guid: a0777da1838dd45d6bc4633a5cf3ba81, type: 3}
 --- !u!58 &4510281529333917923
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -112,39 +98,31 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.01652638, y: 0.066104926}
   serializedVersion: 2
   m_Radius: 1.2874788
---- !u!114 &4510281529333917924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4510281529333917951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d4ab7a1d32de4ed0bd40f1de1995ea7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotateMin: -180
-  rotateMax: 180
---- !u!114 &4510281529333917925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4510281529333917951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06627e4d0d9384d1db6b0ea36b830575, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
 --- !u!50 &4510281529333917922
 Rigidbody2D:
   serializedVersion: 4
@@ -162,7 +140,42 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &45393837231146534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4510281529333917951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a2112ac92384371bab83b880f71f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explodeParticlePrefab: {fileID: 167069512063624204, guid: afbb5f20e064a448987572ef6ea36270, type: 3}
+--- !u!114 &6949158836521274037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4510281529333917951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdf777bc4c8a84ea6a8dd39f8fb4228a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canRotate: 0
+  canMove: 0
+  defaultSpeed: 1.5
+  defaultRotation: 45
