@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionRange: 35
-  detonateTime: 5
+  detonateTime: 95.49
   timeToDestroyObject: 0.15
   detonateTimeText: {fileID: 8324462463124173089}
   hitLayer:

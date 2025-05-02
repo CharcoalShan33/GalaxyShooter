@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Unity.Mathematics;
+using System;
 
 
 public class UIManager : MonoBehaviour
@@ -93,7 +94,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] TMP_Text _waveCountDownText;
 
-    [SerializeField] int count;
+    [SerializeField] float count;
 
     // Start is called before the first frame update
     void Start()
@@ -117,20 +118,26 @@ public class UIManager : MonoBehaviour
         _cFiller.value = maxCoolDown;
         //UpdateAmmo();
 
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        _waveCountDownText.text = count.ToString();
 
-        
+
+        //StartCoroutine(CountDownToStart());
+       // StartCountDown();
         UpdateAmmo();
 
-        _timeText.text = coolDownSeconds.ToString("0.0");
+        //_timeText.text = coolDownSeconds.ToString("0.0");
 
         if (coolDownSeconds > 0)
         {
-            coolDownSeconds -= Time.deltaTime;
+            //coolDownSeconds -= Time.deltaTime;
             _cFiller.value = CountDown();
         }
         else if (coolDownSeconds <= 0)
@@ -139,7 +146,27 @@ public class UIManager : MonoBehaviour
             _cFiller.value = 0;
         }
 
+
+        //_waveCountDownText.text = count.ToString("0.0");
+
     }
+
+    void StartCountDown()
+    {
+        
+        if(count > 0f)
+        {
+            count -= Time.deltaTime;
+
+            
+
+        }
+        Debug.Log(Time.deltaTime);
+
+    }
+
+    
+
     float CountDown()
     {
         return maxCoolDown - coolDownSeconds;

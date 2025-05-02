@@ -160,13 +160,13 @@ public class Player : MonoBehaviour
    //[Header("Other")]
     GameManager _gm;
 
+
+
     void Start()
     {
-        this.gameObject.tag = "Player";
         currentPosition = transform.position;
 
         _laser.SetActive(true);
-
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _shieldRend = transform.Find("Shield").GetComponentInChildren<SpriteRenderer>();
@@ -388,9 +388,9 @@ public class Player : MonoBehaviour
            // StopAllCoroutines();
             //StopCoroutine(Respawn());
             Instantiate(explodeObject, transform.position, Quaternion.identity);
-
             gameObject.SetActive(false);
-            Destroy(this.gameObject, 2.3f);
+         
+            Destroy(this.gameObject, 2.1f);
             _spawnManager.OnPlayerDeath();
         }
 
@@ -398,7 +398,8 @@ public class Player : MonoBehaviour
 
     private IEnumerator Respawn()
     {
-
+        
+        Instantiate(explodeObject, transform.position, Quaternion.identity);
         Collider2D collide = gameObject.GetComponent<Collider2D>();
         collide.enabled = false;
         isFiring = false;
@@ -676,7 +677,8 @@ public class Player : MonoBehaviour
             Instantiate(explodeObject, transform.position, Quaternion.identity);
 
             gameObject.SetActive(false);
-            Destroy(this.gameObject, 2.3f);
+
+            Destroy(this.gameObject, 2.1f);
             _gm.GameOver();
             _spawnManager.OnPlayerDeath();
          

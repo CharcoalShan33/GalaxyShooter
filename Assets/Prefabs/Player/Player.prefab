@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3693564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 74480564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 492977737}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 676020127}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 690713014}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 780216886}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1606900125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Missiles (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 4281901983693929970}
   - component: {fileID: 1046093273753337779}
   - component: {fileID: 2755068719390299379}
+  - component: {fileID: 7549031212438442258}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -274,7 +275,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 346749681250337973}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -609,29 +610,8 @@ MonoBehaviour:
   _tripleShot: {fileID: 3006509916993741778, guid: b004efe25f92d46e89044a97fb21cb0f, type: 3}
   _cannon: {fileID: 5026727671313322419, guid: 103c3f30587df439ba1e2b9714b391c2, type: 3}
   _grenade: {fileID: 8960007894908019872, guid: 228fd3a09e4a8467994677ceb5f7bd54, type: 3}
-  _missile:
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  allMissiles:
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  - {fileID: 1511727958087344433, guid: d65248d97e3b546a6b1a2472cb5d2a45, type: 3}
-  misslePlacements:
-  - {fileID: 690713014}
-  - {fileID: 780216886}
-  - {fileID: 1606900125}
-  - {fileID: 492977737}
-  - {fileID: 74480564}
-  - {fileID: 676020127}
   _laser: {fileID: 6412708761071496626, guid: 979360b7e71a94556b83b6cf2184b314, type: 3}
-  explodeObject: {fileID: 8344124576167811601, guid: a0777da1838dd45d6bc4633a5cf3ba81, type: 3}
+  explodeObject: {fileID: 167069512063624204, guid: afbb5f20e064a448987572ef6ea36270, type: 3}
   rareWeaponActive: 0
   lives: 3
   _score: 0
@@ -653,6 +633,27 @@ MonoBehaviour:
   spawnTime: 3
   currentPosition: {x: 0, y: 0, z: 0}
   invincibleTime: 3
+--- !u!95 &7549031212438442258
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346749681250337973}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c0e839beeda944ce3862d597aab06349, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1106152260771900905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,6 +1024,10 @@ PrefabInstance:
     - target: {fileID: 6202545113075789071, guid: 515c30d399078461ca7cfd62e2f5c56e, type: 3}
       propertyPath: m_Name
       value: Shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202545113075789071, guid: 515c30d399078461ca7cfd62e2f5c56e, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

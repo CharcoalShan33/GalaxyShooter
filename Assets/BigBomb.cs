@@ -38,7 +38,7 @@ public class BigBomb : MonoBehaviour
         }
         // totalDestroyTime = detonateTime + timeToDestroyObject;
 
-        anim.SetBool("isExplode", false);
+        anim.SetBool("IsExplode", false);
 
     }
 
@@ -56,18 +56,20 @@ public class BigBomb : MonoBehaviour
         {
             if (detonateTime > 0f)
             {
+                
                 detonateTime -= Time.deltaTime;
             }
 
             if (detonateTime <= 120 && detonateTime > 0f)
             {
-                anim.SetBool("isExplode", true);
+                anim.SetBool("IsExplode", true);
                 // all for the bomb
-                StartCoroutine(Blink());
+               // StartCoroutine(Blink());
             }
         }
 
-        
+        Debug.Log(Time.deltaTime);
+        Debug.Log(Time.timeScale);
         /// if boss is dead, disarm this object while there
         /// is time left and set the timer to zero.
         /// also,  destroy the object after a few seconds.
@@ -85,7 +87,7 @@ public class BigBomb : MonoBehaviour
 
     private void Explode()
     {
-         anim.SetBool("isExplode", true);
+         anim.SetBool("IsExplode", true);
           Collider2D col = Physics2D.OverlapCircle(transform.position, explosionRange, hitLayer);
 
             if (col != null)
@@ -112,7 +114,7 @@ public class BigBomb : MonoBehaviour
                 }
                 if (col[i].CompareTag("Enemy"))
                 {
-                    col[i].GetComponent<NewEnemy>().Death();
+                   // col[i].GetComponent<NewEnemy>().Death();
                 }
                 if (col[i].CompareTag("Hazard"))
                 {

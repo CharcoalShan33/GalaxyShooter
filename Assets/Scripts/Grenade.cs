@@ -1,12 +1,5 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Timers;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Grenade : MonoBehaviour
@@ -27,9 +20,9 @@ public class Grenade : MonoBehaviour
     public SpriteRenderer spr;
   
 
-    float colorChange = .1f;
+   // float colorChange = .1f;
 
-    Color a1 = Color.white;
+    //Color a1 = Color.white;
 
     void Start()
     {
@@ -37,18 +30,10 @@ public class Grenade : MonoBehaviour
 
         spr = GetComponent<SpriteRenderer>();
         rig = GetComponent<Rigidbody2D>();
-        StartCoroutine(StartThrow());
+       
         
     }
 
-    private IEnumerator StartThrow()
-    {
-    yield return new WaitForSeconds(1f);
-     var direction = transform.up + Vector3.up;
-     rig.AddForce(direction * force);
-     yield return new WaitForSeconds(.1f);
-     StartCountDown();
-    }
 
     void Update()
     { 
@@ -58,11 +43,12 @@ public class Grenade : MonoBehaviour
 
     public void StartCountDown()
     {
+        Debug.Log(countDown);
         if (countDown > 0)
         {
             countDown -= Time.deltaTime;
-           a1 = Color.Lerp(Color.white, Color.black,colorChange);
-           spr.color = a1;
+         //  a1 = Color.Lerp(Color.white, Color.black,colorChange);
+           //spr.color = a1;
         }
          if (countDown == 0f)
         {
@@ -76,7 +62,8 @@ public class Grenade : MonoBehaviour
 
     void FixedUpdate()
     {
-        rig.velocity = movement * Time.deltaTime * Vector3.up;
+       // Debug.Log(Time.fixedDeltaTime);
+       // rig.velocity = movement * Time.fixedDeltaTime * Vector3.up;
     }
 
      void Explode()
@@ -89,8 +76,8 @@ public class Grenade : MonoBehaviour
             {
                 if ( collider.CompareTag("Enemy"))
                 {
-                    NewEnemy newOne = collider.GetComponent<NewEnemy>();
-                    newOne.Death();
+                    //NewEnemy newOne = collider.GetComponent<NewEnemy>();
+                    //newOne.Death();
                     
                 }
                 if (collider.CompareTag("Hazard"))
